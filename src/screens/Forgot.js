@@ -4,7 +4,7 @@ import {Container, Content, Button, Text, Item, Input} from 'native-base';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 
-export default function Forgot() {
+export default function Forgot({navigation}) {
   const schema = Yup.object().shape({
     email: Yup.string()
       .email('Invalid email')
@@ -12,13 +12,17 @@ export default function Forgot() {
       .required('Required field'),
   });
 
+  function goToResetPassword(values) {
+    navigation.navigate('Reset');
+  }
+
   return (
     <Formik
       initialValues={{
         email: '',
       }}
       validationSchema={schema}
-      onSubmit={(values) => console.log(values)}>
+      onSubmit={(values) => goToResetPassword(values)}>
       {({handleChange, handleBlur, handleSubmit, values, touched, errors}) => (
         <Container>
           <Content style={styles.padding}>
