@@ -15,7 +15,7 @@ const Stack = createStackNavigator();
 const MainStack = createStackNavigator();
 
 export default function Main() {
-  const isLogin = false;
+  const isLogin = true;
 
   return (
     <NavigationContainer>
