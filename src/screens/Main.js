@@ -8,6 +8,7 @@ import Home from './Home';
 import LoginEmail from './LoginEmail';
 import Forgot from './Forgot';
 import ResetPassword from './ResetPassword';
+import PhoneNumber from './PhoneNumber';
 
 // import navigator
 const Stack = createStackNavigator();
@@ -38,6 +39,11 @@ export default function Main() {
           <Stack.Screen
             name="Reset"
             component={ResetPassword}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="Phone"
+            component={PhoneNumber}
             options={{headerShown: false}}
           />
         </Stack.Navigator>

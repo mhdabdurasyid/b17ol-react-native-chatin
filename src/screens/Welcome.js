@@ -9,6 +9,10 @@ export default function Welcome({navigation}) {
     navigation.navigate('Login_By_Email');
   }
 
+  function goToSignup() {
+    navigation.navigate('Phone');
+  }
+
   return (
     <View style={styles.parent}>
       <Image source={Logo} style={styles.logo} />
@@ -16,7 +20,10 @@ export default function Welcome({navigation}) {
       <Text style={[styles.white, styles.marginBottom, styles.subHeader]}>
         Try Chatin streamlined and faster than ever!
       </Text>
-      <Button block style={[styles.btn, styles.marginBottom, styles.marginTop]}>
+      <Button
+        block
+        style={[styles.btn, styles.marginBottom, styles.marginTop]}
+        onPress={goToSignup}>
         <Text style={styles.blue}>start</Text>
       </Button>
       <TouchableOpacity onPress={goToLoginByEmail}>
