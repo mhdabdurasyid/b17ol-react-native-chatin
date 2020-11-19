@@ -1,27 +1,65 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Container, Content, Button, Text, Item, Input} from 'native-base';
+import {Formik} from 'formik';
+import * as Yup from 'yup';
 
 export default function LoginEmail() {
+  const schema = Yup.object().shape({
+    email: Yup.string()
+      .email('Invalid email')
+      .max(50, 'Max 50 characters')
+      .required('Required field'),
+    password: Yup.string()
+      .min(6, 'Password required 6 characters')
+      .required('Required field'),
+  });
+
   return (
-    <Container>
-      <Content style={styles.padding}>
-        <Item>
-          <Input placeholder="Email address" />
-        </Item>
-        <Item>
-          <Input placeholder="Password" />
-        </Item>
-        <TouchableOpacity>
-          <Text style={styles.forgotLink}>Forgot your password?</Text>
-        </TouchableOpacity>
-      </Content>
-      <View style={styles.padding}>
-        <Button block style={styles.btnColor}>
-          <Text style={styles.blue}>login</Text>
-        </Button>
-      </View>
-    </Container>
+    <Formik
+      initialValues={{
+        email: '',
+        password: '',
+      }}
+      validationSchema={schema}
+      onSubmit={(values) => console.log(values)}>
+      {({handleChange, handleBlur, handleSubmit, values, touched, errors}) => (
+        <Container>
+          <Content style={styles.padding}>
+            <Item>
+              <Input
+                placeholder="Email address"
+                onChangeText={handleChange('email')}
+                onBlur={handleBlur('email')}
+                value={values.email}
+              />
+            </Item>
+            {touched.email && errors.email && (
+              <Text style={styles.error}>{errors.email}</Text>
+            )}
+            <Item>
+              <Input
+                placeholder="Password"
+                onChangeText={handleChange('password')}
+                onBlur={handleBlur('password')}
+                value={values.password}
+              />
+            </Item>
+            {touched.password && errors.password && (
+              <Text style={styles.error}>{errors.password}</Text>
+            )}
+            <TouchableOpacity>
+              <Text style={styles.forgotLink}>Forgot your password?</Text>
+            </TouchableOpacity>
+          </Content>
+          <View style={styles.padding}>
+            <Button block style={styles.btnColor} onPress={handleSubmit}>
+              <Text style={styles.blue}>login</Text>
+            </Button>
+          </View>
+        </Container>
+      )}
+    </Formik>
   );
 }
 
@@ -39,5 +77,9 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     fontSize: 14,
     marginTop: 16,
+  },
+  error: {
+    fontSize: 12,
+    color: 'red',
   },
 });
