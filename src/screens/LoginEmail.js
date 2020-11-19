@@ -47,6 +47,7 @@ export default function LoginEmail({navigation}) {
                 onChangeText={handleChange('password')}
                 onBlur={handleBlur('password')}
                 value={values.password}
+                secureTextEntry
               />
             </Item>
             {touched.password && errors.password && (
