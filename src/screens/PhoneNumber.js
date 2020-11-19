@@ -39,6 +39,5 @@ const styles = StyleSheet.create({
   },
   btnColor: {
     backgroundColor: '#6ab6e1',
-    borderRadius: 100,
   },
 });
