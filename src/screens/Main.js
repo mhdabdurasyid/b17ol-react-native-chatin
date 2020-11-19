@@ -6,6 +6,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Welcome from './Welcome';
 import Home from './Home';
 import LoginEmail from './LoginEmail';
+import Forgot from './Forgot';
 
 // import navigator
 const Stack = createStackNavigator();
@@ -26,6 +27,11 @@ export default function Main() {
           <Stack.Screen
             name="Login_By_Email"
             component={LoginEmail}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="Forgot"
+            component={Forgot}
             options={{headerShown: false}}
           />
         </Stack.Navigator>

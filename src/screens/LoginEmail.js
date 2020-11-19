@@ -4,7 +4,7 @@ import {Container, Content, Button, Text, Item, Input} from 'native-base';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 
-export default function LoginEmail() {
+export default function LoginEmail({navigation}) {
   const schema = Yup.object().shape({
     email: Yup.string()
       .email('Invalid email')
@@ -14,6 +14,10 @@ export default function LoginEmail() {
       .min(6, 'Password required 6 characters')
       .required('Required field'),
   });
+
+  function goToForgot() {
+    navigation.navigate('Forgot');
+  }
 
   return (
     <Formik
@@ -48,13 +52,13 @@ export default function LoginEmail() {
             {touched.password && errors.password && (
               <Text style={styles.error}>{errors.password}</Text>
             )}
-            <TouchableOpacity>
+            <TouchableOpacity onPress={goToForgot}>
               <Text style={styles.forgotLink}>Forgot your password?</Text>
             </TouchableOpacity>
           </Content>
           <View style={styles.padding}>
             <Button block style={styles.btnColor} onPress={handleSubmit}>
-              <Text style={styles.blue}>login</Text>
+              <Text>login</Text>
             </Button>
           </View>
         </Container>
