@@ -4,7 +4,11 @@ import {Button, Text} from 'native-base';
 
 import Logo from '../assets/img/logo.png';
 
-export default function Welcome() {
+export default function Welcome({navigation}) {
+  function goToLoginByEmail() {
+    navigation.navigate('Login_By_Email');
+  }
+
   return (
     <View style={styles.parent}>
       <Image source={Logo} style={styles.logo} />
@@ -15,7 +19,7 @@ export default function Welcome() {
       <Button block style={[styles.btn, styles.marginBottom, styles.marginTop]}>
         <Text style={styles.blue}>start</Text>
       </Button>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={goToLoginByEmail}>
         <Text style={styles.white}>Log in with email address</Text>
       </TouchableOpacity>
     </View>
