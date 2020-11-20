@@ -2,12 +2,15 @@ import React from 'react';
 import {StyleSheet, View, TouchableOpacity} from 'react-native';
 import {Container, Content, Text} from 'native-base';
 
-export default function Accounts() {
+export default function Accounts({navigation}) {
+  function changePhone() {
+    navigation.navigate('Change_Phone');
+  }
   return (
     <Container>
       <Content>
         <View style={[styles.padding, styles.hr]}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={changePhone}>
             <Text>Phone Number</Text>
             <Text style={styles.text}>+62 856-4961-7528</Text>
           </TouchableOpacity>

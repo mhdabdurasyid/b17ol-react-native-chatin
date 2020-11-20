@@ -19,6 +19,7 @@ import EditName from './EditName';
 import EditStatus from './EditStatus';
 import EditUserID from './EditUserID';
 import Accounts from './Accounts';
+import ChangePhone from './ChangePhone';
 
 // import navigator
 const Stack = createStackNavigator();
@@ -113,6 +114,11 @@ export default function Main() {
             name="Accounts"
             component={Accounts}
             options={{headerLeft: ''}}
+          />
+          <MainStack.Screen
+            name="Change_Phone"
+            component={ChangePhone}
+            options={{headerLeft: '', title: 'Change Phone Number'}}
           />
         </MainStack.Navigator>
       )}
