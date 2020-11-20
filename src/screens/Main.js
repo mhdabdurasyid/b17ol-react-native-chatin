@@ -17,6 +17,7 @@ import Settings from './Settings';
 import Profile from './Profile';
 import EditName from './EditName';
 import EditStatus from './EditStatus';
+import EditUserID from './EditUserID';
 
 // import navigator
 const Stack = createStackNavigator();
@@ -101,6 +102,11 @@ export default function Main() {
             name="Edit_Status"
             component={EditStatus}
             options={{headerLeft: '', title: 'Status Message'}}
+          />
+          <MainStack.Screen
+            name="Edit_UserID"
+            component={EditUserID}
+            options={{headerLeft: '', title: 'User ID'}}
           />
         </MainStack.Navigator>
       )}

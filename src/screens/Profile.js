@@ -44,6 +44,10 @@ export default function Profile({navigation}) {
     navigation.navigate('Edit_Status');
   }
 
+  function editUserID() {
+    navigation.navigate('Edit_UserID');
+  }
+
   return (
     <Container>
       <Content>
@@ -71,7 +75,7 @@ export default function Profile({navigation}) {
           </TouchableOpacity>
         </View>
         <View style={[styles.padding, styles.hr]}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={editUserID}>
             <Text>User ID</Text>
             <Text style={styles.text}>johnhopkinss</Text>
           </TouchableOpacity>
