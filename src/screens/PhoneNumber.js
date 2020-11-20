@@ -4,7 +4,7 @@ import {Container, Content, Button, Text, Item, Input, Icon} from 'native-base';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 
-export default function PhoneNumber() {
+export default function PhoneNumber({navigation}) {
   const schema = Yup.object().shape({
     phone: Yup.string()
       .min(10, 'Min 10 characters')
@@ -12,13 +12,17 @@ export default function PhoneNumber() {
       .required('Required field'),
   });
 
+  function checkPhoneNumber(values) {
+    navigation.navigate('Register');
+  }
+
   return (
     <Formik
       initialValues={{
         phone: '',
       }}
       validationSchema={schema}
-      onSubmit={(values) => console.log(values)}>
+      onSubmit={(values) => checkPhoneNumber(values)}>
       {({
         handleChange,
         handleBlur,
@@ -40,7 +44,7 @@ export default function PhoneNumber() {
             <Item>
               <Input
                 placeholder="Phone Number"
-                keyboardType={'number-pad'}
+                keyboardType={'phone-pad'}
                 onChangeText={handleChange('phone')}
                 onBlur={handleBlur('phone')}
                 value={values.phone}

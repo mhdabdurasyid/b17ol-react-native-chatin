@@ -20,13 +20,14 @@ import EditStatus from './EditStatus';
 import EditUserID from './EditUserID';
 import Accounts from './Accounts';
 import ChangePhone from './ChangePhone';
+import Register from './Register';
 
 // import navigator
 const Stack = createStackNavigator();
 const MainStack = createStackNavigator();
 
 export default function Main() {
-  const isLogin = true;
+  const isLogin = false;
 
   return (
     <NavigationContainer>
@@ -55,6 +56,11 @@ export default function Main() {
           <Stack.Screen
             name="Phone"
             component={PhoneNumber}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="Register"
+            component={Register}
             options={{headerShown: false}}
           />
         </Stack.Navigator>
