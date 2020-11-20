@@ -1,17 +1,47 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, View, TouchableOpacity} from 'react-native';
 import {Container, Content, Text, Thumbnail} from 'native-base';
+import ImagePicker from 'react-native-image-picker';
 
 import Avatar from '../assets/img/avatar.png';
 
 export default function Profile() {
+  const [photo, setPhoto] = useState('');
+  const [imgData, setImgData] = useState(null);
+
+  function selectImage() {
+    let options = {
+      maxWidth: 300,
+      maxHeight: 300,
+      mediaType: 'photo',
+      noData: true,
+      storageOptions: {
+        skipBackup: true,
+      },
+    };
+
+    ImagePicker.showImagePicker(options, (response) => {
+      if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        const source = {
+          uri: response.uri,
+          name: response.fileName,
+          type: response.type,
+        };
+        setImgData(source);
+        setPhoto(source.uri);
+      }
+    });
+  }
+
   return (
     <Container>
       <Content>
         <View style={styles.hr}>
           <View style={[styles.profile, styles.padding]}>
-            <TouchableOpacity>
-              <Thumbnail large source={Avatar} />
+            <TouchableOpacity onPress={selectImage}>
+              <Thumbnail large source={photo !== '' ? {uri: photo} : Avatar} />
             </TouchableOpacity>
             <View style={styles.profileDescription}>
               <Text>Phone Number</Text>
