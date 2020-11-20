@@ -22,6 +22,10 @@ export default function Home({navigation}) {
     navigation.navigate('Add_Friend');
   }
 
+  function goToSettings() {
+    navigation.navigate('Settings');
+  }
+
   return (
     <Container>
       <View style={[styles.padding, styles.appHeader]}>
@@ -40,7 +44,7 @@ export default function Home({navigation}) {
               style={styles.iconSize}
             />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={goToSettings}>
             <Icon
               type="MaterialIcons"
               name="settings"
