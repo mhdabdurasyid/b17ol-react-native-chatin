@@ -16,6 +16,7 @@ import AddFriend from './AddFriend';
 import Settings from './Settings';
 import Profile from './Profile';
 import EditName from './EditName';
+import EditStatus from './EditStatus';
 
 // import navigator
 const Stack = createStackNavigator();
@@ -95,6 +96,11 @@ export default function Main() {
             name="Edit_Name"
             component={EditName}
             options={{headerLeft: '', title: 'Display Name'}}
+          />
+          <MainStack.Screen
+            name="Edit_Status"
+            component={EditStatus}
+            options={{headerLeft: '', title: 'Status Message'}}
           />
         </MainStack.Navigator>
       )}

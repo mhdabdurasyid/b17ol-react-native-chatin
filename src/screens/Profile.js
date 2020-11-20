@@ -39,6 +39,10 @@ export default function Profile({navigation}) {
     navigation.navigate('Edit_Name');
   }
 
+  function editStatus() {
+    navigation.navigate('Edit_Status');
+  }
+
   return (
     <Container>
       <Content>
@@ -60,7 +64,7 @@ export default function Profile({navigation}) {
           </TouchableOpacity>
         </View>
         <View style={[styles.padding, styles.hr]}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={editStatus}>
             <Text>Status Message</Text>
             <Text style={styles.text}>I'm busy, text me later</Text>
           </TouchableOpacity>
