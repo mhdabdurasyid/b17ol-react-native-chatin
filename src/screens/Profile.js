@@ -5,7 +5,7 @@ import ImagePicker from 'react-native-image-picker';
 
 import Avatar from '../assets/img/avatar.png';
 
-export default function Profile() {
+export default function Profile({navigation}) {
   const [photo, setPhoto] = useState('');
   const [imgData, setImgData] = useState(null);
 
@@ -35,6 +35,10 @@ export default function Profile() {
     });
   }
 
+  function editName() {
+    navigation.navigate('Edit_Name');
+  }
+
   return (
     <Container>
       <Content>
@@ -50,7 +54,7 @@ export default function Profile() {
           </View>
         </View>
         <View style={[styles.padding, styles.hr]}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={editName}>
             <Text>Display Name</Text>
             <Text style={styles.text}>John Hopkins</Text>
           </TouchableOpacity>
