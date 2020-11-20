@@ -5,7 +5,11 @@ import {Container, Content, Text, Icon, Fab, Thumbnail} from 'native-base';
 import Logo from '../assets/img/logo.png';
 import Avatar from '../assets/img/avatar.png';
 
-export default function Home() {
+export default function Home({navigation}) {
+  function startChat() {
+    navigation.navigate('Start_Chat');
+  }
+
   return (
     <Container>
       <View style={[styles.padding, styles.appHeader]}>
@@ -245,7 +249,11 @@ export default function Home() {
         </View>
       </Content>
       <View>
-        <Fab containerStyle={{}} style={styles.fabColor} position="bottomRight">
+        <Fab
+          containerStyle={{}}
+          style={styles.fabColor}
+          position="bottomRight"
+          onPress={startChat}>
           <Icon type="MaterialIcons" name="add" />
         </Fab>
       </View>

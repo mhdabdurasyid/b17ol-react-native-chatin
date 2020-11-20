@@ -9,6 +9,7 @@ import LoginEmail from './LoginEmail';
 import Forgot from './Forgot';
 import ResetPassword from './ResetPassword';
 import PhoneNumber from './PhoneNumber';
+import StartChat from './StartChat';
 
 // import navigator
 const Stack = createStackNavigator();
@@ -52,6 +53,11 @@ export default function Main() {
           <MainStack.Screen
             name="Home"
             component={Home}
+            options={{headerShown: false}}
+          />
+          <MainStack.Screen
+            name="Start_Chat"
+            component={StartChat}
             options={{headerShown: false}}
           />
         </MainStack.Navigator>
