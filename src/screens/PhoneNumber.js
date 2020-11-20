@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View, TouchableOpacity} from 'react-native';
-import {Container, Content, Button, Text, Item, Input, Icon} from 'native-base';
+import {Container, Content, Fab, Text, Item, Input, Icon} from 'native-base';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 
@@ -63,10 +63,14 @@ export default function PhoneNumber({navigation}) {
               <Text style={styles.error}>{errors.phone}</Text>
             )}
           </Content>
-          <View style={styles.padding}>
-            <Button block style={styles.btnColor} onPress={handleSubmit}>
-              <Text>next</Text>
-            </Button>
+          <View>
+            <Fab
+              containerStyle={{}}
+              style={styles.fabColor}
+              position="bottomRight"
+              onPress={handleSubmit}>
+              <Icon type="FontAwesome5" name="arrow-right" />
+            </Fab>
           </View>
         </Container>
       )}
@@ -94,5 +98,8 @@ const styles = StyleSheet.create({
   },
   iconSize: {
     fontSize: 20,
+  },
+  fabColor: {
+    backgroundColor: '#6ab6e1',
   },
 });
