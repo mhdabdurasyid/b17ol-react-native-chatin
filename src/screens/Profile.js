@@ -21,7 +21,8 @@ export default function Profile({navigation}) {
     };
 
     ImagePicker.showImagePicker(options, (response) => {
-      if (response.error) {
+      if (response.didCancel) {
+      } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
       } else {
         const source = {
