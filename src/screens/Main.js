@@ -12,6 +12,7 @@ import PhoneNumber from './PhoneNumber';
 import StartChat from './StartChat';
 import Chat from './Chat';
 import Friends from './Friends';
+import AddFriend from './AddFriend';
 
 // import navigator
 const Stack = createStackNavigator();
@@ -70,6 +71,11 @@ export default function Main() {
           <MainStack.Screen
             name="Friends"
             component={Friends}
+            options={{headerShown: false}}
+          />
+          <MainStack.Screen
+            name="Add_Friend"
+            component={AddFriend}
             options={{headerShown: false}}
           />
         </MainStack.Navigator>

@@ -12,13 +12,17 @@ import {
 
 import Avatar from '../assets/img/avatar.png';
 
-export default function Friends() {
+export default function Friends({navigation}) {
+  function addFriend() {
+    navigation.navigate('Add_Friend');
+  }
+
   return (
     <Container>
       <View>
         <View style={[styles.padding, styles.header]}>
           <Text style={styles.headerText}>Friends</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={addFriend}>
             <Icon
               type="MaterialIcons"
               name="person-add"

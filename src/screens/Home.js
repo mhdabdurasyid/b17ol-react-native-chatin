@@ -18,6 +18,10 @@ export default function Home({navigation}) {
     navigation.navigate('Friends');
   }
 
+  function addFriend() {
+    navigation.navigate('Add_Friend');
+  }
+
   return (
     <Container>
       <View style={[styles.padding, styles.appHeader]}>
@@ -29,7 +33,7 @@ export default function Home({navigation}) {
           <TouchableOpacity onPress={getFriends}>
             <Icon type="MaterialIcons" name="person" style={styles.iconSize} />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={addFriend}>
             <Icon
               type="MaterialIcons"
               name="person-add"
