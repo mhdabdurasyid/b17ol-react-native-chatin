@@ -9,6 +9,10 @@ export default function Settings({navigation}) {
     navigation.navigate('Profile');
   }
 
+  function goToAccounts() {
+    navigation.navigate('Accounts');
+  }
+
   return (
     <Container>
       <Content>
@@ -26,7 +30,7 @@ export default function Settings({navigation}) {
             <Icon type="MaterialIcons" name="person" />
             <Text style={styles.listText}>Profile</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.list}>
+          <TouchableOpacity style={styles.list} onPress={goToAccounts}>
             <Icon type="MaterialIcons" name="account-box" />
             <Text style={styles.listText}>Accounts</Text>
           </TouchableOpacity>
