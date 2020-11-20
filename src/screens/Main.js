@@ -14,6 +14,7 @@ import Chat from './Chat';
 import Friends from './Friends';
 import AddFriend from './AddFriend';
 import Settings from './Settings';
+import Profile from './Profile';
 
 // import navigator
 const Stack = createStackNavigator();
@@ -83,6 +84,11 @@ export default function Main() {
             name="Settings"
             component={Settings}
             options={{headerShown: false}}
+          />
+          <MainStack.Screen
+            name="Profile"
+            component={Profile}
+            options={{headerLeft: ''}}
           />
         </MainStack.Navigator>
       )}

@@ -4,7 +4,11 @@ import {Container, Content, Text, Icon, Thumbnail} from 'native-base';
 
 import Avatar from '../assets/img/avatar.png';
 
-export default function Settings() {
+export default function Settings({navigation}) {
+  function goToProfile() {
+    navigation.navigate('Profile');
+  }
+
   return (
     <Container>
       <Content>
@@ -18,7 +22,7 @@ export default function Settings() {
           </View>
         </View>
         <View style={styles.padding}>
-          <TouchableOpacity style={styles.list}>
+          <TouchableOpacity style={styles.list} onPress={goToProfile}>
             <Icon type="MaterialIcons" name="person" />
             <Text style={styles.listText}>Profile</Text>
           </TouchableOpacity>
