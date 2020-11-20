@@ -11,6 +11,7 @@ import ResetPassword from './ResetPassword';
 import PhoneNumber from './PhoneNumber';
 import StartChat from './StartChat';
 import Chat from './Chat';
+import Friends from './Friends';
 
 // import navigator
 const Stack = createStackNavigator();
@@ -64,6 +65,11 @@ export default function Main() {
           <MainStack.Screen
             name="Chat"
             component={Chat}
+            options={{headerShown: false}}
+          />
+          <MainStack.Screen
+            name="Friends"
+            component={Friends}
             options={{headerShown: false}}
           />
         </MainStack.Navigator>

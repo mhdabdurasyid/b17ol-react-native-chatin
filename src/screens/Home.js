@@ -14,6 +14,10 @@ export default function Home({navigation}) {
     navigation.navigate('Chat');
   }
 
+  function getFriends() {
+    navigation.navigate('Friends');
+  }
+
   return (
     <Container>
       <View style={[styles.padding, styles.appHeader]}>
@@ -22,7 +26,7 @@ export default function Home({navigation}) {
           <Text style={styles.brandText}>CHATIN</Text>
         </View>
         <View style={styles.icon}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={getFriends}>
             <Icon type="MaterialIcons" name="person" style={styles.iconSize} />
           </TouchableOpacity>
           <TouchableOpacity>
