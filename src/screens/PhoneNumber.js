@@ -1,6 +1,6 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import {Container, Content, Button, Text, Item, Input} from 'native-base';
+import {StyleSheet, View, TouchableOpacity} from 'react-native';
+import {Container, Content, Button, Text, Item, Input, Icon} from 'native-base';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 
@@ -19,7 +19,15 @@ export default function PhoneNumber() {
       }}
       validationSchema={schema}
       onSubmit={(values) => console.log(values)}>
-      {({handleChange, handleBlur, handleSubmit, values, touched, errors}) => (
+      {({
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        values,
+        touched,
+        errors,
+        handleReset,
+      }) => (
         <Container>
           <Content style={styles.padding}>
             <Text style={styles.header}>
@@ -37,6 +45,15 @@ export default function PhoneNumber() {
                 onBlur={handleBlur('phone')}
                 value={values.phone}
               />
+              {values.phone.length !== 0 && (
+                <TouchableOpacity onPress={handleReset}>
+                  <Icon
+                    type="MaterialIcons"
+                    name="close"
+                    style={styles.iconSize}
+                  />
+                </TouchableOpacity>
+              )}
             </Item>
             {touched.phone && errors.phone && (
               <Text style={styles.error}>{errors.phone}</Text>
@@ -70,5 +87,8 @@ const styles = StyleSheet.create({
   error: {
     fontSize: 12,
     color: 'red',
+  },
+  iconSize: {
+    fontSize: 20,
   },
 });
