@@ -10,6 +10,10 @@ export default function Home({navigation}) {
     navigation.navigate('Start_Chat');
   }
 
+  function readMessage() {
+    navigation.navigate('Chat');
+  }
+
   return (
     <Container>
       <View style={[styles.padding, styles.appHeader]}>
@@ -40,7 +44,7 @@ export default function Home({navigation}) {
       <Content style={styles.padding}>
         <View style={styles.chatCard}>
           <Thumbnail source={Avatar} />
-          <View style={styles.message}>
+          <TouchableOpacity style={styles.message} onPress={readMessage}>
             <Text style={styles.messageSender}>Jeanne</Text>
             <Text
               numberOfLines={1}
@@ -52,7 +56,7 @@ export default function Home({navigation}) {
               ipsum dolor dolorLorem ipsum dolor dolor
             </Text>
             <Text style={styles.messageContent}>19.00</Text>
-          </View>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.chatCard}>

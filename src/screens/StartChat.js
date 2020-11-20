@@ -12,7 +12,11 @@ import {
 
 import Avatar from '../assets/img/avatar.png';
 
-export default function StartChat() {
+export default function StartChat({navigation}) {
+  function doChat() {
+    navigation.navigate('Chat');
+  }
+
   return (
     <Container>
       <View>
@@ -25,7 +29,7 @@ export default function StartChat() {
         </Item>
       </View>
       <Content style={styles.padding}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={doChat}>
           <View style={styles.contact}>
             <Thumbnail small source={Avatar} />
             <Text style={styles.messageSender}>Jeanne</Text>
