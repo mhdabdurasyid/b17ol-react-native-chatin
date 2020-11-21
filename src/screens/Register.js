@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, View, TouchableOpacity} from 'react-native';
 import {
   Container,
@@ -10,10 +10,41 @@ import {
   Icon,
   Thumbnail,
 } from 'native-base';
+import ImagePicker from 'react-native-image-picker';
 
 import Avatar from '../assets/img/avatar.png';
 
 export default function Register() {
+  const [photo, setPhoto] = useState('');
+  const [imgData, setImgData] = useState(null);
+
+  function selectImage() {
+    let options = {
+      maxWidth: 300,
+      maxHeight: 300,
+      mediaType: 'photo',
+      noData: true,
+      storageOptions: {
+        skipBackup: true,
+      },
+    };
+
+    ImagePicker.showImagePicker(options, (response) => {
+      if (response.didCancel) {
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        const source = {
+          uri: response.uri,
+          name: response.fileName,
+          type: response.type,
+        };
+        setImgData(source);
+        setPhoto(source.uri);
+      }
+    });
+  }
+
   return (
     <Container>
       <Content style={styles.padding}>
@@ -21,8 +52,11 @@ export default function Register() {
         <Text>
           Other people on CHATIN can see your display name and profile media
         </Text>
-        <TouchableOpacity>
-          <Thumbnail source={Avatar} style={styles.avatar} />
+        <TouchableOpacity onPress={selectImage}>
+          <Thumbnail
+            source={photo !== '' ? {uri: photo} : Avatar}
+            style={styles.avatar}
+          />
         </TouchableOpacity>
         <Item>
           <Input placeholder="What's your name?" />
