@@ -17,6 +17,12 @@ export default function EditUserID() {
           )}
         </Item>
         <Text style={styles.textLength}>{userID.length}/20</Text>
+        <Text style={[styles.textLength, styles.marginTop]}>
+          Set your CHATIN ID.
+        </Text>
+        <Text style={styles.textLength}>
+          Once your ID is set, it cannot be changed
+        </Text>
       </Content>
       <Button
         block
@@ -43,5 +49,8 @@ const styles = StyleSheet.create({
   textLength: {
     fontSize: 14,
     color: 'gray',
+  },
+  marginTop: {
+    marginTop: 16,
   },
 });
