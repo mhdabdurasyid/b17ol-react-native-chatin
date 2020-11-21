@@ -11,12 +11,18 @@ import {
   Thumbnail,
 } from 'native-base';
 import ImagePicker from 'react-native-image-picker';
+import {Formik} from 'formik';
+import * as Yup from 'yup';
 
 import Avatar from '../assets/img/avatar.png';
 
 export default function Register() {
   const [photo, setPhoto] = useState('');
   const [imgData, setImgData] = useState(null);
+
+  const schema = Yup.object().shape({
+    name: Yup.string().max(20, 'Max 20 characters').required('Required field'),
+  });
 
   function selectImage() {
     let options = {
@@ -46,28 +52,66 @@ export default function Register() {
   }
 
   return (
-    <Container>
-      <Content style={styles.padding}>
-        <Text style={styles.header}>Create a new account</Text>
-        <Text>
-          Other people on CHATIN can see your display name and profile media
-        </Text>
-        <TouchableOpacity onPress={selectImage}>
-          <Thumbnail
-            source={photo !== '' ? {uri: photo} : Avatar}
-            style={styles.avatar}
-          />
-        </TouchableOpacity>
-        <Item>
-          <Input placeholder="What's your name?" />
-        </Item>
-      </Content>
-      <View>
-        <Fab containerStyle={{}} style={styles.fabColor} position="bottomRight">
-          <Icon type="FontAwesome5" name="arrow-right" />
-        </Fab>
-      </View>
-    </Container>
+    <Formik
+      initialValues={{
+        name: '',
+      }}
+      validationSchema={schema}
+      onSubmit={(values) => console.log(values)}>
+      {({
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        values,
+        touched,
+        errors,
+        handleReset,
+      }) => (
+        <Container>
+          <Content style={styles.padding}>
+            <Text style={styles.header}>Create a new account</Text>
+            <Text>
+              Other people on CHATIN can see your display name and profile media
+            </Text>
+            <TouchableOpacity onPress={selectImage}>
+              <Thumbnail
+                source={photo !== '' ? {uri: photo} : Avatar}
+                style={styles.avatar}
+              />
+            </TouchableOpacity>
+            <Item>
+              <Input
+                placeholder="What's your name?"
+                onChangeText={handleChange('name')}
+                onBlur={handleBlur('name')}
+                value={values.name}
+              />
+              {values.name.length !== 0 && (
+                <TouchableOpacity onPress={handleReset}>
+                  <Icon
+                    type="MaterialIcons"
+                    name="close"
+                    style={styles.iconSize}
+                  />
+                </TouchableOpacity>
+              )}
+            </Item>
+            {touched.name && errors.name && (
+              <Text style={styles.error}>{errors.name}</Text>
+            )}
+          </Content>
+          <View>
+            <Fab
+              containerStyle={{}}
+              style={styles.fabColor}
+              position="bottomRight"
+              onPress={handleSubmit}>
+              <Icon type="FontAwesome5" name="arrow-right" />
+            </Fab>
+          </View>
+        </Container>
+      )}
+    </Formik>
   );
 }
 
