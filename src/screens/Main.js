@@ -21,6 +21,7 @@ import EditUserID from './EditUserID';
 import Accounts from './Accounts';
 import ChangePhone from './ChangePhone';
 import Register from './Register';
+import CreatePassword from './CreatePassword';
 
 // import navigator
 const Stack = createStackNavigator();
@@ -61,6 +62,11 @@ export default function Main() {
           <Stack.Screen
             name="Register"
             component={Register}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="Create_Password"
+            component={CreatePassword}
             options={{headerShown: false}}
           />
         </Stack.Navigator>

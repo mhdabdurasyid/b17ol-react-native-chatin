@@ -16,7 +16,7 @@ import * as Yup from 'yup';
 
 import Avatar from '../assets/img/avatar.png';
 
-export default function Register() {
+export default function Register({navigation}) {
   const [photo, setPhoto] = useState('');
   const [imgData, setImgData] = useState(null);
 
@@ -51,13 +51,17 @@ export default function Register() {
     });
   }
 
+  function createPassword(values) {
+    navigation.navigate('Create_Password');
+  }
+
   return (
     <Formik
       initialValues={{
         name: '',
       }}
       validationSchema={schema}
-      onSubmit={(values) => console.log(values)}>
+      onSubmit={(values) => createPassword(values)}>
       {({
         handleChange,
         handleBlur,
