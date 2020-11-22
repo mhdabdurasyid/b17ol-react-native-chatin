@@ -8,6 +8,7 @@ export default function CreatePassword() {
   const schema = Yup.object().shape({
     password: Yup.string()
       .min(6, 'Password required 6 character')
+      .max(20, 'Password required max 20 characters')
       .required('Required field'),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password'), null], 'Password must match')

@@ -8,6 +8,7 @@ export default function ResetPassword() {
   const schema = Yup.object().shape({
     newPassword: Yup.string()
       .min(6, 'Password required 6 characters')
+      .max(20, 'Password required max 20 characters')
       .required('Required field'),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('newPassword'), null], 'New password must match')

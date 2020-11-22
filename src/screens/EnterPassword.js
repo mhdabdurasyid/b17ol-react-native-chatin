@@ -8,6 +8,7 @@ export default function EnterPassword() {
   const schema = Yup.object().shape({
     password: Yup.string()
       .min(6, 'Password required 6 character')
+      .max(20, 'Password required max 20 characters')
       .required('Required field'),
   });
 

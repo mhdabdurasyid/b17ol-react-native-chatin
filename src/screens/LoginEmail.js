@@ -12,6 +12,7 @@ export default function LoginEmail({navigation}) {
       .required('Required field'),
     password: Yup.string()
       .min(6, 'Password required 6 characters')
+      .max(20, 'Password required max 20 characters')
       .required('Required field'),
   });
 
