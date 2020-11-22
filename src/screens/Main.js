@@ -24,6 +24,7 @@ import Register from './Register';
 import CreatePassword from './CreatePassword';
 import EnterPassword from './EnterPassword';
 import ChangeEmail from './ChangeEmail';
+import ChangePassword from './ChangePassword';
 
 // import navigator
 const Stack = createStackNavigator();
@@ -143,6 +144,11 @@ export default function Main() {
             name="Change_Email"
             component={ChangeEmail}
             options={{headerLeft: '', title: 'Email Registration'}}
+          />
+          <MainStack.Screen
+            name="Change_Password"
+            component={ChangePassword}
+            options={{headerLeft: '', title: 'Change Password'}}
           />
         </MainStack.Navigator>
       )}

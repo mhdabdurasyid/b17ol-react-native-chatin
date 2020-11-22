@@ -11,6 +11,10 @@ export default function Accounts({navigation}) {
     navigation.navigate('Change_Email');
   }
 
+  function changePassword() {
+    navigation.navigate('Change_Password');
+  }
+
   return (
     <Container>
       <Content>
@@ -27,7 +31,7 @@ export default function Accounts({navigation}) {
           </TouchableOpacity>
         </View>
         <View style={[styles.padding, styles.hr]}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={changePassword}>
             <Text>Password</Text>
             <Text style={styles.text}>Complete</Text>
           </TouchableOpacity>
