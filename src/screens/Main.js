@@ -23,13 +23,14 @@ import ChangePhone from './ChangePhone';
 import Register from './Register';
 import CreatePassword from './CreatePassword';
 import EnterPassword from './EnterPassword';
+import ChangeEmail from './ChangeEmail';
 
 // import navigator
 const Stack = createStackNavigator();
 const MainStack = createStackNavigator();
 
 export default function Main() {
-  const isLogin = false;
+  const isLogin = true;
 
   return (
     <NavigationContainer>
@@ -137,6 +138,11 @@ export default function Main() {
             name="Change_Phone"
             component={ChangePhone}
             options={{headerLeft: '', title: 'Change Phone Number'}}
+          />
+          <MainStack.Screen
+            name="Change_Email"
+            component={ChangeEmail}
+            options={{headerLeft: '', title: 'Email Registration'}}
           />
         </MainStack.Navigator>
       )}

@@ -6,6 +6,11 @@ export default function Accounts({navigation}) {
   function changePhone() {
     navigation.navigate('Change_Phone');
   }
+
+  function changeEmail() {
+    navigation.navigate('Change_Email');
+  }
+
   return (
     <Container>
       <Content>
@@ -16,7 +21,7 @@ export default function Accounts({navigation}) {
           </TouchableOpacity>
         </View>
         <View style={[styles.padding, styles.hr]}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={changeEmail}>
             <Text>Email</Text>
             <Text style={styles.text}>johnhopkinss@mail.com</Text>
           </TouchableOpacity>
