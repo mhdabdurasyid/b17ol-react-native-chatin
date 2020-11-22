@@ -11,7 +11,7 @@ export default function ChangePhone() {
         <Item>
           <Input
             value={phone}
-            keyboardType={'number-pad'}
+            keyboardType={'phone-pad'}
             onChangeText={(text) => setPhone(text)}
           />
           {phone.length !== 0 && (
