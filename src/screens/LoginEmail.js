@@ -1,10 +1,17 @@
-import React from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import React, {useEffect} from 'react';
+import {Alert, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Container, Content, Button, Text, Item, Input} from 'native-base';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+import {useDispatch, useSelector} from 'react-redux';
+
+// import actions
+import authAction from '../redux/actions/auth';
 
 export default function LoginEmail({navigation}) {
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+
   const schema = Yup.object().shape({
     email: Yup.string()
       .email('Invalid email')
@@ -20,6 +27,17 @@ export default function LoginEmail({navigation}) {
     navigation.navigate('Forgot');
   }
 
+  function login(data) {
+    dispatch(authAction.loginByEmail(data));
+  }
+
+  useEffect(() => {
+    if (auth.isError) {
+      Alert.alert(auth.alertMsg);
+      dispatch(authAction.clearAlert());
+    }
+  });
+
   return (
     <Formik
       initialValues={{
@@ -27,7 +45,7 @@ export default function LoginEmail({navigation}) {
         password: '',
       }}
       validationSchema={schema}
-      onSubmit={(values) => console.log(values)}>
+      onSubmit={(values) => login(values)}>
       {({handleChange, handleBlur, handleSubmit, values, touched, errors}) => (
         <Container>
           <Content style={styles.padding}>

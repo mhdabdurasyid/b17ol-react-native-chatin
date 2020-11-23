@@ -1,6 +1,7 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import {useSelector} from 'react-redux';
 
 // import screens
 import Welcome from './Welcome';
@@ -31,11 +32,11 @@ const Stack = createStackNavigator();
 const MainStack = createStackNavigator();
 
 export default function Main() {
-  const isLogin = true;
+  const auth = useSelector((state) => state.auth);
 
   return (
     <NavigationContainer>
-      {!isLogin ? (
+      {!auth.isLogin ? (
         <Stack.Navigator>
           <Stack.Screen
             name="Welcome"
