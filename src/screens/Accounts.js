@@ -1,8 +1,14 @@
 import React from 'react';
 import {StyleSheet, View, TouchableOpacity} from 'react-native';
 import {Container, Content, Text} from 'native-base';
+import {useDispatch} from 'react-redux';
+
+// import actions
+import authAction from '../redux/actions/auth';
 
 export default function Accounts({navigation}) {
+  const dispatch = useDispatch();
+
   function changePhone() {
     navigation.navigate('Change_Phone');
   }
@@ -13,6 +19,10 @@ export default function Accounts({navigation}) {
 
   function changePassword() {
     navigation.navigate('Change_Password');
+  }
+
+  function logout() {
+    dispatch(authAction.logout());
   }
 
   return (
@@ -42,7 +52,7 @@ export default function Accounts({navigation}) {
           </TouchableOpacity>
         </View>
         <View style={[styles.padding, styles.hr]}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={logout}>
             <Text>Logout</Text>
           </TouchableOpacity>
         </View>

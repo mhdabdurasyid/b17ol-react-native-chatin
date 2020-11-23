@@ -7,6 +7,9 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case 'LOGOUT': {
+      return initialState;
+    }
     case 'LOGIN_EMAIL_PENDING': {
       return {
         ...state,
