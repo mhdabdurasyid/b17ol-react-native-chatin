@@ -12,4 +12,8 @@ export default {
   logout: () => ({
     type: 'LOGOUT',
   }),
+  forgotPassword: (data) => ({
+    type: 'FORGOT_PASSWORD',
+    payload: http().post('/auth/isEmailValid', qs.stringify(data)),
+  }),
 };

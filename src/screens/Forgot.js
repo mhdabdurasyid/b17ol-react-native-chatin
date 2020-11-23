@@ -1,10 +1,17 @@
-import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import React, {useEffect} from 'react';
+import {Alert, StyleSheet, View} from 'react-native';
 import {Container, Content, Button, Text, Item, Input} from 'native-base';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+import {useDispatch, useSelector} from 'react-redux';
+
+// import actions
+import authAction from '../redux/actions/auth';
 
 export default function Forgot({navigation}) {
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+
   const schema = Yup.object().shape({
     email: Yup.string()
       .email('Invalid email')
@@ -12,9 +19,21 @@ export default function Forgot({navigation}) {
       .required('Required field'),
   });
 
-  function goToResetPassword(values) {
-    navigation.navigate('Reset');
+  function goToResetPassword(data) {
+    dispatch(authAction.forgotPassword(data));
   }
+
+  useEffect(() => {
+    if (auth.isEmailError) {
+      Alert.alert(auth.alertMsg);
+      dispatch(authAction.clearAlert());
+    }
+
+    if (auth.emailValidData.id) {
+      navigation.navigate('Reset', {id: auth.emailValidData.id});
+      dispatch(authAction.clearAlert());
+    }
+  });
 
   return (
     <Formik

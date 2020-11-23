@@ -3,6 +3,9 @@ const initialState = {
   isError: false,
   token: '',
   alertMsg: '',
+
+  isEmailError: false,
+  emailValidData: {},
 };
 
 export default (state = initialState, action) => {
@@ -40,6 +43,32 @@ export default (state = initialState, action) => {
         ...state,
         isError: false,
         alertMsg: '',
+        isEmailError: false,
+        emailValidData: {},
+      };
+    }
+    case 'FORGOT_PASSWORD_PENDING': {
+      return {
+        ...state,
+        isLoading: true,
+        alertMsg: 'Checking your email. Please wait..',
+      };
+    }
+    case 'FORGOT_PASSWORD_REJECTED': {
+      return {
+        ...state,
+        isLoading: false,
+        isEmailError: true,
+        alertMsg: action.payload.response.data.message,
+      };
+    }
+    case 'FORGOT_PASSWORD_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        isEmailError: false,
+        emailValidData: action.payload.data.result,
+        alertMsg: action.payload.data.message,
       };
     }
     default: {
