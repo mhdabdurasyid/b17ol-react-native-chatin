@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 // import actions
 import authAction from '../redux/actions/auth';
 import profileAction from '../redux/actions/profile';
+import friendAction from '../redux/actions/friend';
 
 export default function Accounts({navigation}) {
   const dispatch = useDispatch();
@@ -26,6 +27,7 @@ export default function Accounts({navigation}) {
   function logout() {
     dispatch(authAction.logout());
     dispatch(profileAction.destroy());
+    dispatch(friendAction.destroy());
   }
 
   return (

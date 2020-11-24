@@ -1,20 +1,32 @@
-import React from 'react';
-import {StyleSheet, View, TouchableOpacity} from 'react-native';
+import React, {useEffect} from 'react';
 import {
-  Container,
-  Content,
-  Text,
-  Icon,
-  Thumbnail,
-  Item,
-  Input,
-} from 'native-base';
+  Alert,
+  FlatList,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+} from 'react-native';
+import {Container, Text, Icon, Thumbnail, Item, Input} from 'native-base';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+import {useDispatch, useSelector} from 'react-redux';
+import {API_URL} from '@env';
+
+// import actions
+import friendAction from '../redux/actions/friend';
 
 import Avatar from '../assets/img/avatar.png';
 
 export default function StartChat({navigation}) {
+  const dispatch = useDispatch();
+  const friend = useSelector((state) => state.friend);
+  const auth = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    dispatch(friendAction.getFriendList('', auth.token));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
+
   const schema = Yup.object().shape({
     name: Yup.string().max(20),
   });
@@ -23,6 +35,17 @@ export default function StartChat({navigation}) {
     navigation.navigate('Chat');
   }
 
+  function searchFriend(values) {
+    dispatch(friendAction.getFriendList(values.name, auth.token));
+  }
+
+  useEffect(() => {
+    if (friend.friendIsError) {
+      Alert.alert("User isn't found!");
+      dispatch(friendAction.resetMsg());
+    }
+  });
+
   return (
     <Container>
       <Formik
@@ -30,7 +53,7 @@ export default function StartChat({navigation}) {
           name: '',
         }}
         validationSchema={schema}
-        onSubmit={(values) => console.log(values)}>
+        onSubmit={(values) => searchFriend(values)}>
         {({handleChange, handleBlur, handleSubmit, values, handleReset}) => (
           <View>
             <View style={[styles.padding, styles.header]}>
@@ -58,14 +81,28 @@ export default function StartChat({navigation}) {
           </View>
         )}
       </Formik>
-      <Content style={styles.padding}>
-        <TouchableOpacity onPress={doChat}>
-          <View style={styles.contact}>
-            <Thumbnail small source={Avatar} />
-            <Text style={styles.messageSender}>Jeanne</Text>
-          </View>
-        </TouchableOpacity>
-      </Content>
+      <FlatList
+        data={friend.friendData}
+        renderItem={({item}) => (
+          <TouchableOpacity
+            key={item.friend}
+            onPress={doChat}
+            style={styles.padding}>
+            <View style={styles.contact}>
+              <Thumbnail
+                small
+                source={
+                  item.contact.photo
+                    ? {uri: `${API_URL}${item.contact.photo}`}
+                    : Avatar
+                }
+              />
+              <Text style={styles.messageSender}>{item.contact.name}</Text>
+            </View>
+          </TouchableOpacity>
+        )}
+        keyExtractor={(item, index) => index}
+      />
     </Container>
   );
 }
