@@ -6,16 +6,15 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import {Container, Text, Icon, Thumbnail, Item, Input} from 'native-base';
+import {Container, Text, Icon, Item, Input} from 'native-base';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {useDispatch, useSelector} from 'react-redux';
-import {API_URL} from '@env';
 
 // import actions
 import friendAction from '../redux/actions/friend';
 
-import Avatar from '../assets/img/avatar.png';
+import Contact from '../components/Contact';
 
 export default function StartChat({navigation}) {
   const dispatch = useDispatch();
@@ -84,24 +83,11 @@ export default function StartChat({navigation}) {
       <FlatList
         data={friend.friendData}
         renderItem={({item}) => (
-          <TouchableOpacity
-            key={item.friend}
-            onPress={doChat}
-            style={styles.padding}>
-            <View style={styles.contact}>
-              <Thumbnail
-                small
-                source={
-                  item.contact.photo
-                    ? {uri: `${API_URL}${item.contact.photo}`}
-                    : Avatar
-                }
-              />
-              <Text style={styles.messageSender}>{item.contact.name}</Text>
-            </View>
+          <TouchableOpacity onPress={doChat} style={styles.padding}>
+            <Contact item={item} />
           </TouchableOpacity>
         )}
-        keyExtractor={(item, index) => index}
+        keyExtractor={(item) => item.friend}
       />
     </Container>
   );
@@ -117,15 +103,6 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 20,
     fontWeight: 'bold',
-  },
-  contact: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 10,
-  },
-  messageSender: {
-    fontWeight: 'bold',
-    marginLeft: 12,
   },
   iconSize: {
     fontSize: 20,
