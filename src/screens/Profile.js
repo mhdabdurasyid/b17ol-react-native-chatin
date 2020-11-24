@@ -2,12 +2,15 @@ import React, {useState} from 'react';
 import {StyleSheet, View, TouchableOpacity} from 'react-native';
 import {Container, Content, Text, Thumbnail} from 'native-base';
 import ImagePicker from 'react-native-image-picker';
+import {useSelector} from 'react-redux';
+import {API_URL} from '@env';
 
 import Avatar from '../assets/img/avatar.png';
 
 export default function Profile({navigation}) {
-  const [photo, setPhoto] = useState('');
   const [imgData, setImgData] = useState(null);
+  const profile = useSelector((state) => state.profile);
+  const [photo, setPhoto] = useState(profile.profileData.photo);
 
   function selectImage() {
     let options = {
@@ -54,30 +57,53 @@ export default function Profile({navigation}) {
         <View style={styles.hr}>
           <View style={[styles.profile, styles.padding]}>
             <TouchableOpacity onPress={selectImage}>
-              <Thumbnail large source={photo !== '' ? {uri: photo} : Avatar} />
+              <Thumbnail
+                large
+                source={
+                  photo
+                    ? {
+                        uri: photo.includes('upload')
+                          ? `${API_URL}${photo}`
+                          : photo,
+                      }
+                    : Avatar
+                }
+              />
             </TouchableOpacity>
             <View style={styles.profileDescription}>
               <Text>Phone Number</Text>
-              <Text style={styles.phone}>+62 856-4961-7528</Text>
+              <Text style={styles.phone}>
+                {profile.profileData.phone_number}
+              </Text>
             </View>
           </View>
         </View>
         <View style={[styles.padding, styles.hr]}>
           <TouchableOpacity onPress={editName}>
             <Text>Display Name</Text>
-            <Text style={styles.text}>John Hopkins</Text>
+            <Text style={styles.text}>{profile.profileData.name}</Text>
           </TouchableOpacity>
         </View>
         <View style={[styles.padding, styles.hr]}>
           <TouchableOpacity onPress={editStatus}>
             <Text>Status Message</Text>
-            <Text style={styles.text}>I'm busy, text me later</Text>
+            <Text style={styles.text}>
+              {profile.profileData.status
+                ? profile.profileData.status
+                : 'Not set'}
+            </Text>
           </TouchableOpacity>
         </View>
         <View style={[styles.padding, styles.hr]}>
-          <TouchableOpacity onPress={editUserID}>
+          <TouchableOpacity
+            onPress={editUserID}
+            disabled={profile.profileData.user_id ? true : false}>
             <Text>User ID</Text>
-            <Text style={styles.text}>johnhopkinss</Text>
+            <Text style={styles.text}>
+              {profile.profileData.user_id
+                ? profile.profileData.user_id
+                : 'Not set'}
+            </Text>
           </TouchableOpacity>
         </View>
       </Content>
