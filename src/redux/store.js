@@ -8,7 +8,7 @@ import {persistStore, persistReducer} from 'redux-persist';
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['auth'],
+  whitelist: ['auth', 'profile'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
