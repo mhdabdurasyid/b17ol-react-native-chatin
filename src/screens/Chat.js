@@ -4,12 +4,18 @@ import {Container, Text, Icon, Item, Input} from 'native-base';
 import {useSelector} from 'react-redux';
 import dayjs from 'dayjs';
 import jwt_decode from 'jwt-decode';
+import {Formik} from 'formik';
+import * as Yup from 'yup';
 
 export default function Chat({route}) {
   const message = useSelector((state) => state.message);
   const auth = useSelector((state) => state.auth);
   const {id} = jwt_decode(auth.token);
   const {friendId, friendName} = route.params;
+
+  const schema = Yup.object().shape({
+    message: Yup.string().trim().max(1000).required(),
+  });
 
   return (
     <Container>
@@ -39,12 +45,31 @@ export default function Chat({route}) {
         keyExtractor={(item) => item.id}
       />
       <View style={styles.sendMsg}>
-        <Item style={styles.padding}>
-          <Input multiline style={styles.message} />
-          <TouchableOpacity>
-            <Icon type="MaterialIcons" name="send" style={styles.iconColor} />
-          </TouchableOpacity>
-        </Item>
+        <Formik
+          initialValues={{
+            message: '',
+          }}
+          validationSchema={schema}
+          onSubmit={(values) => console.log(values)}>
+          {({handleChange, handleBlur, handleSubmit, values}) => (
+            <Item style={styles.padding}>
+              <Input
+                multiline
+                style={styles.message}
+                onChangeText={handleChange('message')}
+                onBlur={handleBlur('message')}
+                value={values.message}
+              />
+              <TouchableOpacity onPress={handleSubmit}>
+                <Icon
+                  type="MaterialIcons"
+                  name="send"
+                  style={styles.iconColor}
+                />
+              </TouchableOpacity>
+            </Item>
+          )}
+        </Formik>
       </View>
     </Container>
   );
