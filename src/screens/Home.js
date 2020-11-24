@@ -1,11 +1,34 @@
-import React from 'react';
-import {Image, StyleSheet, View, TouchableOpacity} from 'react-native';
-import {Container, Content, Text, Icon, Fab, Thumbnail} from 'native-base';
+import React, {useEffect} from 'react';
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+} from 'react-native';
+import {Container, Text, Icon, Fab, Thumbnail} from 'native-base';
+import {useDispatch, useSelector} from 'react-redux';
+import dayjs from 'dayjs';
+import jwt_decode from 'jwt-decode';
+import {API_URL} from '@env';
+
+// import actions
+import messageAction from '../redux/actions/message';
 
 import Logo from '../assets/img/logo.png';
 import Avatar from '../assets/img/avatar.png';
 
 export default function Home({navigation}) {
+  const dispatch = useDispatch();
+  const message = useSelector((state) => state.message);
+  const auth = useSelector((state) => state.auth);
+  const {id} = jwt_decode(auth.token);
+
+  useEffect(() => {
+    dispatch(messageAction.getMessageList(auth.token));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
+
   function startChat() {
     navigation.navigate('Start_Chat');
   }
@@ -53,217 +76,39 @@ export default function Home({navigation}) {
           </TouchableOpacity>
         </View>
       </View>
-      <Content style={styles.padding}>
-        <View style={styles.chatCard}>
-          <Thumbnail source={Avatar} />
-          <TouchableOpacity style={styles.message} onPress={readMessage}>
-            <Text style={styles.messageSender}>Jeanne</Text>
-            <Text
-              numberOfLines={1}
-              ellipsizeMode="tail"
-              style={styles.messageContent}>
-              Lorem ipsum dolor dolorLorem ipsum dolor dolorLorem ipsum dolor
-              dolorLorem ipsum dolor dolorLorem ipsum dolor dolorLorem ipsum
-              dolor dolorLorem ipsum dolor dolorLorem ipsum dolor dolorLorem
-              ipsum dolor dolorLorem ipsum dolor dolor
-            </Text>
-            <Text style={styles.messageContent}>19.00</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.chatCard}>
-          <Thumbnail source={Avatar} />
-          <View style={styles.message}>
-            <Text style={styles.messageSender}>Jeanne</Text>
-            <Text
-              numberOfLines={1}
-              ellipsizeMode="tail"
-              style={styles.messageContent}>
-              Lorem ipsum dolor dolorLorem ipsum dolor dolorLorem ipsum dolor
-              dolorLorem ipsum dolor dolorLorem ipsum dolor dolorLorem ipsum
-              dolor dolorLorem ipsum dolor dolorLorem ipsum dolor dolorLorem
-              ipsum dolor dolorLorem ipsum dolor dolor
-            </Text>
-            <Text style={styles.messageContent}>19.00</Text>
+      <FlatList
+        data={message.messageData}
+        renderItem={({item}) => (
+          <View style={[styles.chatCard, styles.padding]}>
+            <Thumbnail
+              source={
+                item.sender_id !== id
+                  ? item.sender_photo
+                    ? {uri: `${API_URL}${item.sender_photo}`}
+                    : Avatar
+                  : item.receiver_photo
+                  ? {uri: `${API_URL}${item.receiver_photo}`}
+                  : Avatar
+              }
+            />
+            <TouchableOpacity style={styles.message} onPress={readMessage}>
+              <Text style={styles.messageSender}>
+                {item.sender_id !== id ? item.sender_name : item.receiver_name}
+              </Text>
+              <Text
+                numberOfLines={1}
+                ellipsizeMode="tail"
+                style={styles.messageContent}>
+                {item.message}
+              </Text>
+              <Text style={styles.timeContent}>
+                {dayjs(item.createdAt).format('hh:mm A DD/MM/YY')}
+              </Text>
+            </TouchableOpacity>
           </View>
-        </View>
-        <View style={styles.chatCard}>
-          <Thumbnail source={Avatar} />
-          <View style={styles.message}>
-            <Text style={styles.messageSender}>Jeanne</Text>
-            <Text
-              numberOfLines={1}
-              ellipsizeMode="tail"
-              style={styles.messageContent}>
-              Lorem ipsum dolor dolorLorem ipsum dolor dolorLorem ipsum dolor
-              dolorLorem ipsum dolor dolorLorem ipsum dolor dolorLorem ipsum
-              dolor dolorLorem ipsum dolor dolorLorem ipsum dolor dolorLorem
-              ipsum dolor dolorLorem ipsum dolor dolor
-            </Text>
-            <Text style={styles.messageContent}>19.00</Text>
-          </View>
-        </View>
-        <View style={styles.chatCard}>
-          <Thumbnail source={Avatar} />
-          <View style={styles.message}>
-            <Text style={styles.messageSender}>Jeanne</Text>
-            <Text
-              numberOfLines={1}
-              ellipsizeMode="tail"
-              style={styles.messageContent}>
-              Lorem ipsum dolor dolorLorem ipsum dolor dolorLorem ipsum dolor
-              dolorLorem ipsum dolor dolorLorem ipsum dolor dolorLorem ipsum
-              dolor dolorLorem ipsum dolor dolorLorem ipsum dolor dolorLorem
-              ipsum dolor dolorLorem ipsum dolor dolor
-            </Text>
-            <Text style={styles.messageContent}>19.00</Text>
-          </View>
-        </View>
-        <View style={styles.chatCard}>
-          <Thumbnail source={Avatar} />
-          <View style={styles.message}>
-            <Text style={styles.messageSender}>Jeanne</Text>
-            <Text
-              numberOfLines={1}
-              ellipsizeMode="tail"
-              style={styles.messageContent}>
-              Lorem ipsum dolor dolorLorem ipsum dolor dolorLorem ipsum dolor
-              dolorLorem ipsum dolor dolorLorem ipsum dolor dolorLorem ipsum
-              dolor dolorLorem ipsum dolor dolorLorem ipsum dolor dolorLorem
-              ipsum dolor dolorLorem ipsum dolor dolor
-            </Text>
-            <Text style={styles.messageContent}>19.00</Text>
-          </View>
-        </View>
-        <View style={styles.chatCard}>
-          <Thumbnail source={Avatar} />
-          <View style={styles.message}>
-            <Text style={styles.messageSender}>Jeanne</Text>
-            <Text
-              numberOfLines={1}
-              ellipsizeMode="tail"
-              style={styles.messageContent}>
-              Lorem ipsum dolor dolorLorem ipsum dolor dolorLorem ipsum dolor
-              dolorLorem ipsum dolor dolorLorem ipsum dolor dolorLorem ipsum
-              dolor dolorLorem ipsum dolor dolorLorem ipsum dolor dolorLorem
-              ipsum dolor dolorLorem ipsum dolor dolor
-            </Text>
-            <Text style={styles.messageContent}>19.00</Text>
-          </View>
-        </View>
-        <View style={styles.chatCard}>
-          <Thumbnail source={Avatar} />
-          <View style={styles.message}>
-            <Text style={styles.messageSender}>Jeanne</Text>
-            <Text
-              numberOfLines={1}
-              ellipsizeMode="tail"
-              style={styles.messageContent}>
-              Lorem ipsum dolor dolorLorem ipsum dolor dolorLorem ipsum dolor
-              dolorLorem ipsum dolor dolorLorem ipsum dolor dolorLorem ipsum
-              dolor dolorLorem ipsum dolor dolorLorem ipsum dolor dolorLorem
-              ipsum dolor dolorLorem ipsum dolor dolor
-            </Text>
-            <Text style={styles.messageContent}>19.00</Text>
-          </View>
-        </View>
-        <View style={styles.chatCard}>
-          <Thumbnail source={Avatar} />
-          <View style={styles.message}>
-            <Text style={styles.messageSender}>Jeanne</Text>
-            <Text
-              numberOfLines={1}
-              ellipsizeMode="tail"
-              style={styles.messageContent}>
-              Lorem ipsum dolor dolorLorem ipsum dolor dolorLorem ipsum dolor
-              dolorLorem ipsum dolor dolorLorem ipsum dolor dolorLorem ipsum
-              dolor dolorLorem ipsum dolor dolorLorem ipsum dolor dolorLorem
-              ipsum dolor dolorLorem ipsum dolor dolor
-            </Text>
-            <Text style={styles.messageContent}>19.00</Text>
-          </View>
-        </View>
-        <View style={styles.chatCard}>
-          <Thumbnail source={Avatar} />
-          <View style={styles.message}>
-            <Text style={styles.messageSender}>Jeanne</Text>
-            <Text
-              numberOfLines={1}
-              ellipsizeMode="tail"
-              style={styles.messageContent}>
-              Lorem ipsum dolor dolorLorem ipsum dolor dolorLorem ipsum dolor
-              dolorLorem ipsum dolor dolorLorem ipsum dolor dolorLorem ipsum
-              dolor dolorLorem ipsum dolor dolorLorem ipsum dolor dolorLorem
-              ipsum dolor dolorLorem ipsum dolor dolor
-            </Text>
-            <Text style={styles.messageContent}>19.00</Text>
-          </View>
-        </View>
-        <View style={styles.chatCard}>
-          <Thumbnail source={Avatar} />
-          <View style={styles.message}>
-            <Text style={styles.messageSender}>Jeanne</Text>
-            <Text
-              numberOfLines={1}
-              ellipsizeMode="tail"
-              style={styles.messageContent}>
-              Lorem ipsum dolor dolorLorem ipsum dolor dolorLorem ipsum dolor
-              dolorLorem ipsum dolor dolorLorem ipsum dolor dolorLorem ipsum
-              dolor dolorLorem ipsum dolor dolorLorem ipsum dolor dolorLorem
-              ipsum dolor dolorLorem ipsum dolor dolor
-            </Text>
-            <Text style={styles.messageContent}>19.00</Text>
-          </View>
-        </View>
-        <View style={styles.chatCard}>
-          <Thumbnail source={Avatar} />
-          <View style={styles.message}>
-            <Text style={styles.messageSender}>Jeanne</Text>
-            <Text
-              numberOfLines={1}
-              ellipsizeMode="tail"
-              style={styles.messageContent}>
-              Lorem ipsum dolor dolorLorem ipsum dolor dolorLorem ipsum dolor
-              dolorLorem ipsum dolor dolorLorem ipsum dolor dolorLorem ipsum
-              dolor dolorLorem ipsum dolor dolorLorem ipsum dolor dolorLorem
-              ipsum dolor dolorLorem ipsum dolor dolor
-            </Text>
-            <Text style={styles.messageContent}>19.00</Text>
-          </View>
-        </View>
-        <View style={styles.chatCard}>
-          <Thumbnail source={Avatar} />
-          <View style={styles.message}>
-            <Text style={styles.messageSender}>Jeanne</Text>
-            <Text
-              numberOfLines={1}
-              ellipsizeMode="tail"
-              style={styles.messageContent}>
-              Lorem ipsum dolor dolorLorem ipsum dolor dolorLorem ipsum dolor
-              dolorLorem ipsum dolor dolorLorem ipsum dolor dolorLorem ipsum
-              dolor dolorLorem ipsum dolor dolorLorem ipsum dolor dolorLorem
-              ipsum dolor dolorLorem ipsum dolor dolor
-            </Text>
-            <Text style={styles.messageContent}>19.00</Text>
-          </View>
-        </View>
-        <View style={styles.chatCard}>
-          <Thumbnail source={Avatar} />
-          <View style={styles.message}>
-            <Text style={styles.messageSender}>Jeanne</Text>
-            <Text
-              numberOfLines={1}
-              ellipsizeMode="tail"
-              style={styles.messageContent}>
-              Lorem ipsum dolor dolorLorem ipsum dolor dolorLorem ipsum dolor
-              dolorLorem ipsum dolor dolorLorem ipsum dolor dolorLorem ipsum
-              dolor dolorLorem ipsum dolor dolorLorem ipsum dolor dolorLorem
-              ipsum dolor dolorLorem ipsum dolor dolor
-            </Text>
-            <Text style={styles.messageContent}>19.00</Text>
-          </View>
-        </View>
-      </Content>
+        )}
+        keyExtractor={(item) => item.id}
+      />
       <View>
         <Fab
           containerStyle={{}}
@@ -327,6 +172,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   messageContent: {
-    fontSize: 12,
+    fontSize: 14,
+  },
+  timeContent: {
+    fontSize: 11,
   },
 });
