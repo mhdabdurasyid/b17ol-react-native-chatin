@@ -10,4 +10,11 @@ export default {
   destroy: () => ({
     type: 'DESTROY_PROFILE',
   }),
+  editProfile: (form, token) => ({
+    type: 'EDIT_PROFILE',
+    payload: http(token).patch('/users', form),
+  }),
+  resetEdit: () => ({
+    type: 'RESET_EDIT',
+  }),
 };
