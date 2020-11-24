@@ -20,4 +20,8 @@ export default {
     type: 'RESET_PASSWORD',
     payload: http().post(`/auth/resetPassword/${id}`, qs.stringify(data)),
   }),
+  isPhoneValid: (data) => ({
+    type: 'PHONE_VALIDATION',
+    payload: http().post('/auth/isPhoneRegister', qs.stringify(data)),
+  }),
 };

@@ -9,6 +9,9 @@ const initialState = {
 
   isResetError: false,
   isReset: false,
+
+  isPhoneError: false,
+  isPhoneValid: false,
 };
 
 export default (state = initialState, action) => {
@@ -50,6 +53,8 @@ export default (state = initialState, action) => {
         emailValidData: {},
         isResetError: false,
         isReset: false,
+        isPhoneError: false,
+        isPhoneValid: false,
       };
     }
     case 'FORGOT_PASSWORD_PENDING': {
@@ -97,6 +102,30 @@ export default (state = initialState, action) => {
         isLoading: false,
         isResetError: false,
         isReset: true,
+        alertMsg: action.payload.data.message,
+      };
+    }
+    case 'PHONE_VALIDATION_PENDING': {
+      return {
+        ...state,
+        isLoading: true,
+        alertMsg: 'Checking your phone number. Please wait..',
+      };
+    }
+    case 'PHONE_VALIDATION_REJECTED': {
+      return {
+        ...state,
+        isLoading: false,
+        isPhoneError: true,
+        alertMsg: action.payload.response.data.message,
+      };
+    }
+    case 'PHONE_VALIDATION_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        isPhoneError: false,
+        isPhoneValid: true,
         alertMsg: action.payload.data.message,
       };
     }

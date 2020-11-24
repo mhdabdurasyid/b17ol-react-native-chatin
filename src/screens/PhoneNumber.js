@@ -1,10 +1,18 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, TouchableOpacity} from 'react-native';
 import {Container, Content, Fab, Text, Item, Input, Icon} from 'native-base';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+import {useDispatch, useSelector} from 'react-redux';
+
+// import actions
+import authAction from '../redux/actions/auth';
 
 export default function PhoneNumber({navigation}) {
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  const [phoneNumber, setPhoneNumber] = useState('');
+
   const schema = Yup.object().shape({
     phone: Yup.string()
       .min(10, 'Min 10 characters')
@@ -13,8 +21,22 @@ export default function PhoneNumber({navigation}) {
   });
 
   function checkPhoneNumber(values) {
-    navigation.navigate('Register');
+    const data = {phoneNumber: values.phone};
+    dispatch(authAction.isPhoneValid(data));
+    setPhoneNumber(values.phone);
   }
+
+  useEffect(() => {
+    if (auth.isPhoneValid) {
+      navigation.navigate('Enter_Password', {phoneNumber});
+      dispatch(authAction.clearAlert());
+    }
+
+    if (auth.isPhoneError) {
+      navigation.navigate('Register');
+      dispatch(authAction.clearAlert());
+    }
+  });
 
   return (
     <Formik
