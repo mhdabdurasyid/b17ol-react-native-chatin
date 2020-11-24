@@ -3,6 +3,11 @@ const initialState = {
   friendIsLoading: false,
   friendIsError: false,
   friendAlertMsg: '',
+
+  searchIsLoading: false,
+  searchIsError: false,
+  searchAlert: '',
+  searchData: [],
 };
 
 export default (state = initialState, action) => {
@@ -37,6 +42,31 @@ export default (state = initialState, action) => {
         ...state,
         friendIsError: false,
         friendAlertMsg: '',
+        searchIsError: false,
+        searchAlert: '',
+      };
+    }
+    case 'SEARCH_USER_PENDING': {
+      return {
+        ...state,
+        searchIsLoading: true,
+        searchAlert: 'Search user in progress. Please wait..',
+      };
+    }
+    case 'SEARCH_USER_REJECTED': {
+      return {
+        ...state,
+        searchIsLoading: false,
+        searchIsError: true,
+        searchAlert: action.payload.response.data.message,
+      };
+    }
+    case 'SEARCH_USER_FULFILLED': {
+      return {
+        ...state,
+        searchIsLoading: false,
+        searchIsError: false,
+        searchData: action.payload.data.result,
       };
     }
     default: {

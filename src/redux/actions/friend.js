@@ -1,4 +1,5 @@
 import http from '../../helpers/http';
+import qs from 'querystring';
 
 export default {
   getFriendList: (name = '', token) => {
@@ -13,4 +14,10 @@ export default {
   resetMsg: () => ({
     type: 'RESET_MSG',
   }),
+  searchUser: (data, token) => {
+    return {
+      type: 'SEARCH_USER',
+      payload: http(token).post('/users/search', qs.stringify(data)),
+    };
+  },
 };

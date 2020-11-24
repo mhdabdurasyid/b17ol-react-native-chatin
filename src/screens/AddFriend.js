@@ -1,61 +1,106 @@
-import React from 'react';
-import {StyleSheet, View, TouchableOpacity} from 'react-native';
+import React, {useEffect} from 'react';
 import {
-  Container,
-  Content,
-  Text,
-  Icon,
-  Thumbnail,
-  Item,
-  Input,
-} from 'native-base';
+  Alert,
+  FlatList,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+} from 'react-native';
+import {Container, Text, Icon, Thumbnail, Item, Input} from 'native-base';
+import {Formik} from 'formik';
+import * as Yup from 'yup';
+import {useDispatch, useSelector} from 'react-redux';
+import {API_URL} from '@env';
+
+// import actions
+import friendAction from '../redux/actions/friend';
 
 import Avatar from '../assets/img/avatar.png';
 
 export default function AddFriend() {
+  const dispatch = useDispatch();
+  const friend = useSelector((state) => state.friend);
+  const auth = useSelector((state) => state.auth);
+
+  const schema = Yup.object().shape({
+    userId: Yup.string().max(20).required(),
+  });
+
+  function searchUser(data) {
+    dispatch(friendAction.searchUser(data, auth.token));
+  }
+
+  useEffect(() => {
+    if (friend.searchIsError) {
+      Alert.alert(friend.searchAlert);
+      dispatch(friendAction.resetMsg());
+    }
+  });
+
   return (
     <Container>
-      <View>
-        <View style={[styles.padding, styles.header]}>
-          <Text style={styles.headerText}>Add Friends</Text>
-          <TouchableOpacity>
-            <Icon type="MaterialIcons" name="share" style={styles.iconSize} />
-          </TouchableOpacity>
-        </View>
-        <Item style={styles.padding}>
-          <Icon type="MaterialIcons" name="search" />
-          <Input placeholder="Enter your friend's ID" />
-        </Item>
-      </View>
-      <Content style={styles.padding}>
-        <View style={styles.contact}>
-          <Thumbnail small source={Avatar} />
-          <View style={styles.addFriend}>
-            <Text style={styles.contactName}>Eleven Christine</Text>
-            <TouchableOpacity>
-              <Icon
-                type="MaterialIcons"
-                name="person-add"
-                style={styles.iconSize}
+      <Formik
+        initialValues={{
+          userId: '',
+        }}
+        validationSchema={schema}
+        onSubmit={(values) => searchUser(values)}>
+        {({handleChange, handleBlur, handleSubmit, values, handleReset}) => (
+          <View>
+            <View style={[styles.padding, styles.header]}>
+              <Text style={styles.headerText}>Add Friends</Text>
+              <TouchableOpacity>
+                <Icon
+                  type="MaterialIcons"
+                  name="share"
+                  style={styles.iconSize}
+                />
+              </TouchableOpacity>
+            </View>
+            <Item style={styles.padding}>
+              <Icon type="MaterialIcons" name="search" />
+              <Input
+                placeholder="Enter your friend's ID"
+                onChangeText={handleChange('userId')}
+                onBlur={handleBlur('userId')}
+                value={values.userId}
+                onSubmitEditing={handleSubmit}
               />
-            </TouchableOpacity>
+              {values.userId.length !== 0 && (
+                <TouchableOpacity onPress={handleReset}>
+                  <Icon
+                    type="MaterialIcons"
+                    name="close"
+                    style={styles.iconSize}
+                  />
+                </TouchableOpacity>
+              )}
+            </Item>
           </View>
-        </View>
-
-        <View style={styles.contact}>
-          <Thumbnail small source={Avatar} />
-          <View style={styles.addFriend}>
-            <Text style={styles.contactName}>John Hopkins</Text>
-            <TouchableOpacity>
-              <Icon
-                type="MaterialIcons"
-                name="person-add"
-                style={styles.iconSize}
-              />
-            </TouchableOpacity>
+        )}
+      </Formik>
+      <FlatList
+        data={friend.searchData}
+        renderItem={({item}) => (
+          <View style={[styles.contact, styles.padding]}>
+            <Thumbnail
+              small
+              source={item.photo ? {uri: `${API_URL}${item.photo}`} : Avatar}
+            />
+            <View style={styles.addFriend}>
+              <Text style={styles.contactName}>{item.name}</Text>
+              <TouchableOpacity>
+                <Icon
+                  type="MaterialIcons"
+                  name="person-add"
+                  style={styles.iconSize}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </Content>
+        )}
+        keyExtractor={(item) => item.id}
+      />
     </Container>
   );
 }
