@@ -30,9 +30,18 @@ export default function AddFriend() {
     dispatch(friendAction.searchUser(data, auth.token));
   }
 
+  function addFriend(friendId) {
+    dispatch(friendAction.addFriend({friendId}, auth.token));
+  }
+
   useEffect(() => {
     if (friend.searchIsError) {
       Alert.alert(friend.searchAlert);
+      dispatch(friendAction.resetMsg());
+    }
+
+    if (friend.addIsError || friend.isAdd) {
+      Alert.alert(friend.addAlert);
       dispatch(friendAction.resetMsg());
     }
   });
@@ -89,7 +98,7 @@ export default function AddFriend() {
             />
             <View style={styles.addFriend}>
               <Text style={styles.contactName}>{item.name}</Text>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => addFriend(item.id)}>
                 <Icon
                   type="MaterialIcons"
                   name="person-add"

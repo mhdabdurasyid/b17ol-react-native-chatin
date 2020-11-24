@@ -20,4 +20,10 @@ export default {
       payload: http(token).post('/users/search', qs.stringify(data)),
     };
   },
+  addFriend: (data, token) => {
+    return {
+      type: 'ADD_FRIEND',
+      payload: http(token).post('/friend', qs.stringify(data)),
+    };
+  },
 };
