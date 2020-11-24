@@ -24,4 +24,8 @@ export default {
     type: 'PHONE_VALIDATION',
     payload: http().post('/auth/isPhoneRegister', qs.stringify(data)),
   }),
+  loginByPhone: (data) => ({
+    type: 'LOGIN_PHONE',
+    payload: http().post('/auth/loginByPhone', qs.stringify(data)),
+  }),
 };

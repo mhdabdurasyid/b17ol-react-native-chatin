@@ -129,6 +129,31 @@ export default (state = initialState, action) => {
         alertMsg: action.payload.data.message,
       };
     }
+    case 'LOGIN_PHONE_PENDING': {
+      return {
+        ...state,
+        isLoading: true,
+        alertMsg: 'Loggin in. Please wait..',
+      };
+    }
+    case 'LOGIN_PHONE_REJECTED': {
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+        alertMsg: action.payload.response.data.message,
+      };
+    }
+    case 'LOGIN_PHONE_FULFILLED': {
+      return {
+        ...state,
+        token: action.payload.data.token,
+        isLoading: false,
+        isError: false,
+        isLogin: true,
+        alertMsg: 'Successfully login',
+      };
+    }
     default: {
       return state;
     }

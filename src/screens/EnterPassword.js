@@ -1,15 +1,38 @@
-import React from 'react';
-import {StyleSheet, View, TouchableOpacity} from 'react-native';
+import React, {useEffect} from 'react';
+import {Alert, StyleSheet, View, TouchableOpacity} from 'react-native';
 import {Container, Content, Fab, Text, Item, Input, Icon} from 'native-base';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+import {useDispatch, useSelector} from 'react-redux';
 
-export default function EnterPassword() {
+// import actions
+import authAction from '../redux/actions/auth';
+
+export default function EnterPassword({route}) {
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  const {phoneNumber} = route.params;
+
   const schema = Yup.object().shape({
     password: Yup.string()
       .min(6, 'Password required 6 character')
       .max(20, 'Password required max 20 characters')
       .required('Required field'),
+  });
+
+  function login(values) {
+    const data = {
+      phoneNumber,
+      password: values.password,
+    };
+    dispatch(authAction.loginByPhone(data));
+  }
+
+  useEffect(() => {
+    if (auth.isError) {
+      Alert.alert(auth.alertMsg);
+      dispatch(authAction.clearAlert());
+    }
   });
 
   return (
@@ -18,7 +41,7 @@ export default function EnterPassword() {
         password: '',
       }}
       validationSchema={schema}
-      onSubmit={(values) => console.log(values)}>
+      onSubmit={(values) => login(values)}>
       {({
         handleChange,
         handleBlur,
