@@ -1,15 +1,19 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, TouchableOpacity} from 'react-native';
 import {Container, Content, Text, Thumbnail} from 'native-base';
 import ImagePicker from 'react-native-image-picker';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {API_URL} from '@env';
+
+// import actions
+import profileAction from '../redux/actions/profile';
 
 import Avatar from '../assets/img/avatar.png';
 
 export default function Profile({navigation}) {
-  const [imgData, setImgData] = useState(null);
+  const dispatch = useDispatch();
   const profile = useSelector((state) => state.profile);
+  const auth = useSelector((state) => state.auth);
   const [photo, setPhoto] = useState(profile.profileData.photo);
 
   function selectImage() {
@@ -33,11 +37,21 @@ export default function Profile({navigation}) {
           name: response.fileName,
           type: response.type,
         };
-        setImgData(source);
+
         setPhoto(source.uri);
+        const form = new FormData();
+        form.append('image', source);
+        dispatch(profileAction.editProfile(form, auth.token));
       }
     });
   }
+
+  useEffect(() => {
+    if (profile.isEdit) {
+      dispatch(profileAction.getProfile(auth.token));
+      dispatch(profileAction.resetEdit());
+    }
+  });
 
   function editName() {
     navigation.navigate('Edit_Name');
