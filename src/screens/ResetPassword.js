@@ -1,10 +1,18 @@
-import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import React, {useEffect} from 'react';
+import {Alert, StyleSheet, View} from 'react-native';
 import {Container, Content, Button, Text, Item, Input} from 'native-base';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+import {useDispatch, useSelector} from 'react-redux';
 
-export default function ResetPassword() {
+// import actions
+import authAction from '../redux/actions/auth';
+
+export default function ResetPassword({route, navigation}) {
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  const {id} = route.params;
+
   const schema = Yup.object().shape({
     newPassword: Yup.string()
       .min(6, 'Password required 6 characters')
@@ -15,6 +23,18 @@ export default function ResetPassword() {
       .required('Required field'),
   });
 
+  function doResetPassword(data) {
+    dispatch(authAction.resetPassword(id, data));
+  }
+
+  useEffect(() => {
+    if (auth.isReset) {
+      Alert.alert(auth.alertMsg);
+      navigation.navigate('Welcome');
+      dispatch(authAction.clearAlert());
+    }
+  });
+
   return (
     <Formik
       initialValues={{
@@ -22,7 +42,7 @@ export default function ResetPassword() {
         confirmPassword: '',
       }}
       validationSchema={schema}
-      onSubmit={(values) => console.log(values)}>
+      onSubmit={(values) => doResetPassword(values)}>
       {({handleChange, handleBlur, handleSubmit, values, touched, errors}) => (
         <Container>
           <Content style={styles.padding}>

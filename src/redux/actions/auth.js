@@ -16,4 +16,8 @@ export default {
     type: 'FORGOT_PASSWORD',
     payload: http().post('/auth/isEmailValid', qs.stringify(data)),
   }),
+  resetPassword: (id, data) => ({
+    type: 'RESET_PASSWORD',
+    payload: http().post(`/auth/resetPassword/${id}`, qs.stringify(data)),
+  }),
 };
