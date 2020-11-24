@@ -1,9 +1,30 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Container, Content, Text, Button, Item, Input, Icon} from 'native-base';
+import {useDispatch, useSelector} from 'react-redux';
 
-export default function ChangePhone() {
+// import actions
+import profileAction from '../redux/actions/profile';
+
+export default function ChangePhone({navigation}) {
+  const dispatch = useDispatch();
+  const profile = useSelector((state) => state.profile);
+  const auth = useSelector((state) => state.auth);
   const [phone, setPhone] = useState('');
+
+  function doChangePhone() {
+    const form = new FormData();
+    form.append('phoneNumber', phone);
+    dispatch(profileAction.editProfile(form, auth.token));
+  }
+
+  useEffect(() => {
+    if (profile.isEdit) {
+      dispatch(profileAction.getProfile(auth.token));
+      dispatch(profileAction.resetEdit());
+      navigation.navigate('Accounts');
+    }
+  });
 
   return (
     <Container>
@@ -28,7 +49,8 @@ export default function ChangePhone() {
       <Button
         block
         style={styles.btnColor}
-        disabled={phone.length === 0 ? true : false}>
+        disabled={phone.length < 10 || phone.length > 12 ? true : false}
+        onPress={doChangePhone}>
         <Text>next</Text>
       </Button>
     </Container>
