@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, TouchableOpacity} from 'react-native';
 import {Container, Content, Text} from 'native-base';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 // import actions
 import authAction from '../redux/actions/auth';
@@ -9,6 +9,7 @@ import profileAction from '../redux/actions/profile';
 
 export default function Accounts({navigation}) {
   const dispatch = useDispatch();
+  const profile = useSelector((state) => state.profile);
 
   function changePhone() {
     navigation.navigate('Change_Phone');
@@ -33,13 +34,17 @@ export default function Accounts({navigation}) {
         <View style={[styles.padding, styles.hr]}>
           <TouchableOpacity onPress={changePhone}>
             <Text>Phone Number</Text>
-            <Text style={styles.text}>+62 856-4961-7528</Text>
+            <Text style={styles.text}>{profile.profileData.phone_number}</Text>
           </TouchableOpacity>
         </View>
         <View style={[styles.padding, styles.hr]}>
           <TouchableOpacity onPress={changeEmail}>
             <Text>Email</Text>
-            <Text style={styles.text}>johnhopkinss@mail.com</Text>
+            <Text style={styles.text}>
+              {profile.profileData.email
+                ? profile.profileData.email
+                : 'Not set'}
+            </Text>
           </TouchableOpacity>
         </View>
         <View style={[styles.padding, styles.hr]}>
@@ -48,11 +53,11 @@ export default function Accounts({navigation}) {
             <Text style={styles.text}>Complete</Text>
           </TouchableOpacity>
         </View>
-        <View style={[styles.padding, styles.hr]}>
+        {/* <View style={[styles.padding, styles.hr]}>
           <TouchableOpacity>
             <Text>Delete My Account</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
         <View style={[styles.padding, styles.hr]}>
           <TouchableOpacity onPress={logout}>
             <Text>Logout</Text>
