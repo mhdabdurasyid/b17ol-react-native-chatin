@@ -1,10 +1,18 @@
-import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import React, {useEffect} from 'react';
+import {Alert, StyleSheet, View} from 'react-native';
 import {Container, Content, Fab, Text, Item, Input, Icon} from 'native-base';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+import {useDispatch, useSelector} from 'react-redux';
 
-export default function CreatePassword() {
+// import actions
+import authAction from '../redux/actions/auth';
+
+export default function CreatePassword({route, navigation}) {
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  const {phoneNumber, name, image} = route.params;
+
   const schema = Yup.object().shape({
     password: Yup.string()
       .min(6, 'Password required 6 character')
@@ -15,6 +23,26 @@ export default function CreatePassword() {
       .required('Required field'),
   });
 
+  function register(values) {
+    const form = new FormData();
+    form.append('phoneNumber', phoneNumber);
+    form.append('name', name);
+    form.append('password', values.password);
+    form.append('confirmPassword', values.confirmPassword);
+    if (image) {
+      form.append('image', image);
+    }
+    dispatch(authAction.register(form));
+  }
+
+  useEffect(() => {
+    if (auth.isRegister) {
+      Alert.alert('Register success, login first');
+      navigation.navigate('Enter_Password', {phoneNumber});
+      dispatch(authAction.clearAlert());
+    }
+  });
+
   return (
     <Formik
       initialValues={{
@@ -22,7 +50,7 @@ export default function CreatePassword() {
         confirmPassword: '',
       }}
       validationSchema={schema}
-      onSubmit={(values) => console.log(values)}>
+      onSubmit={(values) => register(values)}>
       {({handleChange, handleBlur, handleSubmit, values, touched, errors}) => (
         <Container>
           <Content style={styles.padding}>

@@ -28,4 +28,8 @@ export default {
     type: 'LOGIN_PHONE',
     payload: http().post('/auth/loginByPhone', qs.stringify(data)),
   }),
+  register: (form) => ({
+    type: 'REGISTER',
+    payload: http().post('/auth/register', form),
+  }),
 };

@@ -16,9 +16,10 @@ import * as Yup from 'yup';
 
 import Avatar from '../assets/img/avatar.png';
 
-export default function Register({navigation}) {
+export default function Register({route, navigation}) {
   const [photo, setPhoto] = useState('');
   const [imgData, setImgData] = useState(null);
+  const {phoneNumber} = route.params;
 
   const schema = Yup.object().shape({
     name: Yup.string().max(20, 'Max 20 characters').required('Required field'),
@@ -52,7 +53,11 @@ export default function Register({navigation}) {
   }
 
   function createPassword(values) {
-    navigation.navigate('Create_Password');
+    navigation.navigate('Create_Password', {
+      phoneNumber,
+      name: values.name,
+      image: imgData,
+    });
   }
 
   return (

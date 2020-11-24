@@ -33,7 +33,7 @@ export default function PhoneNumber({navigation}) {
     }
 
     if (auth.isPhoneError) {
-      navigation.navigate('Register');
+      navigation.navigate('Register', {phoneNumber});
       dispatch(authAction.clearAlert());
     }
   });

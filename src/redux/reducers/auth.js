@@ -12,6 +12,9 @@ const initialState = {
 
   isPhoneError: false,
   isPhoneValid: false,
+
+  isRegisterError: false,
+  isRegister: false,
 };
 
 export default (state = initialState, action) => {
@@ -55,6 +58,8 @@ export default (state = initialState, action) => {
         isReset: false,
         isPhoneError: false,
         isPhoneValid: false,
+        isRegisterError: false,
+        isRegister: false,
       };
     }
     case 'FORGOT_PASSWORD_PENDING': {
@@ -152,6 +157,30 @@ export default (state = initialState, action) => {
         isError: false,
         isLogin: true,
         alertMsg: 'Successfully login',
+      };
+    }
+    case 'REGISTER_PENDING': {
+      return {
+        ...state,
+        isLoading: true,
+        alertMsg: 'Loggin in. Please wait..',
+      };
+    }
+    case 'REGISTER_REJECTED': {
+      return {
+        ...state,
+        isLoading: false,
+        isRegisterError: true,
+        alertMsg: action.payload.response.data.message,
+      };
+    }
+    case 'REGISTER_FULFILLED': {
+      return {
+        ...state,
+        isLoading: false,
+        isRegisterError: false,
+        isRegister: true,
+        alertMsg: 'Successfully register',
       };
     }
     default: {
