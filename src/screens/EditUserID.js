@@ -1,9 +1,30 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Container, Content, Text, Button, Item, Input, Icon} from 'native-base';
+import {useDispatch, useSelector} from 'react-redux';
 
-export default function EditUserID() {
-  const [userID, setUserID] = useState('johnhopkinss');
+// import actions
+import profileAction from '../redux/actions/profile';
+
+export default function EditUserID({navigation}) {
+  const dispatch = useDispatch();
+  const profile = useSelector((state) => state.profile);
+  const auth = useSelector((state) => state.auth);
+  const [userID, setUserID] = useState('');
+
+  function doEditUserID() {
+    const form = new FormData();
+    form.append('userId', userID);
+    dispatch(profileAction.editProfile(form, auth.token));
+  }
+
+  useEffect(() => {
+    if (profile.isEdit) {
+      dispatch(profileAction.getProfile(auth.token));
+      dispatch(profileAction.resetEdit());
+      navigation.navigate('Profile');
+    }
+  });
 
   return (
     <Container>
@@ -27,7 +48,8 @@ export default function EditUserID() {
       <Button
         block
         style={styles.btnColor}
-        disabled={userID.length === 0 ? true : false}>
+        disabled={userID.length === 0 || userID.length > 20 ? true : false}
+        onPress={doEditUserID}>
         <Text>ok</Text>
       </Button>
     </Container>
