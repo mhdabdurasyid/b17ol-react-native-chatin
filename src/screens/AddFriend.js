@@ -11,6 +11,7 @@ import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {useDispatch, useSelector} from 'react-redux';
 import {API_URL} from '@env';
+import jwt_decode from 'jwt-decode';
 
 // import actions
 import friendAction from '../redux/actions/friend';
@@ -21,6 +22,7 @@ export default function AddFriend() {
   const dispatch = useDispatch();
   const friend = useSelector((state) => state.friend);
   const auth = useSelector((state) => state.auth);
+  const {id} = jwt_decode(auth.token);
 
   const schema = Yup.object().shape({
     userId: Yup.string().max(20).required(),
@@ -31,7 +33,9 @@ export default function AddFriend() {
   }
 
   function addFriend(friendId) {
-    dispatch(friendAction.addFriend({friendId}, auth.token));
+    if (friendId !== id) {
+      dispatch(friendAction.addFriend({friendId}, auth.token));
+    }
   }
 
   useEffect(() => {
