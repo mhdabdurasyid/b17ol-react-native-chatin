@@ -1,13 +1,17 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {FlatList, StyleSheet, View, TouchableOpacity} from 'react-native';
 import {Container, Text, Icon, Item, Input} from 'native-base';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import dayjs from 'dayjs';
 import jwt_decode from 'jwt-decode';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 
+// import actions
+import messageAction from '../redux/actions/message';
+
 export default function Chat({route}) {
+  const dispatch = useDispatch();
   const message = useSelector((state) => state.message);
   const auth = useSelector((state) => state.auth);
   const {id} = jwt_decode(auth.token);
@@ -15,6 +19,22 @@ export default function Chat({route}) {
 
   const schema = Yup.object().shape({
     message: Yup.string().trim().max(1000).required(),
+  });
+
+  function sendMessage(values) {
+    const data = {
+      message: values.message,
+      receiverId: friendId,
+    };
+    dispatch(messageAction.sendMessage(data, auth.token));
+  }
+
+  useEffect(() => {
+    if (message.isSend) {
+      dispatch(messageAction.getMessageDetail(friendId, auth.token));
+      dispatch(messageAction.getMessageList(auth.token));
+      dispatch(messageAction.resetSend());
+    }
   });
 
   return (
@@ -50,7 +70,10 @@ export default function Chat({route}) {
             message: '',
           }}
           validationSchema={schema}
-          onSubmit={(values) => console.log(values)}>
+          onSubmit={(values, {resetForm}) => {
+            sendMessage(values);
+            resetForm({values: ''});
+          }}>
           {({handleChange, handleBlur, handleSubmit, values}) => (
             <Item style={styles.padding}>
               <Input

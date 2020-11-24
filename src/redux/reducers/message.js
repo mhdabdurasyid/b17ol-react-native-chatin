@@ -8,6 +8,11 @@ const initialState = {
   msgDetailIsLoading: false,
   msgDetailIsError: false,
   msgDetailAlertMsg: '',
+
+  sendIsLoading: false,
+  sendIsError: false,
+  sendAlert: '',
+  isSend: false,
 };
 
 export default (state = initialState, action) => {
@@ -63,6 +68,36 @@ export default (state = initialState, action) => {
       return {
         ...state,
         msgDetailData: [],
+      };
+    }
+    case 'SEND_MESSAGE_PENDING': {
+      return {
+        ...state,
+        sendIsLoading: true,
+        sendAlert: 'Sending message. Please wait..',
+      };
+    }
+    case 'SEND_MESSAGE_REJECTED': {
+      return {
+        ...state,
+        sendIsLoading: false,
+        sendIsError: true,
+        sendAlert: action.payload.response.data.message,
+      };
+    }
+    case 'SEND_MESSAGE_FULFILLED': {
+      return {
+        ...state,
+        sendIsLoading: false,
+        sendIsError: false,
+        isSend: true,
+        sendAlert: 'Successfully send message',
+      };
+    }
+    case 'RESET_SEND': {
+      return {
+        ...state,
+        isSend: false,
       };
     }
     default: {
