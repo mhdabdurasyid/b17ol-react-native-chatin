@@ -13,6 +13,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 // import actions
 import friendAction from '../redux/actions/friend';
+import messageAction from '../redux/actions/message';
 
 import Contact from '../components/Contact';
 
@@ -30,8 +31,10 @@ export default function StartChat({navigation}) {
     name: Yup.string().max(20),
   });
 
-  function doChat() {
-    navigation.navigate('Chat');
+  function doChat(friendId, friendName) {
+    dispatch(messageAction.clearDetail());
+    dispatch(messageAction.getMessageDetail(friendId, auth.token));
+    navigation.navigate('Chat', {friendId, friendName});
   }
 
   function searchFriend(values) {
@@ -83,7 +86,9 @@ export default function StartChat({navigation}) {
       <FlatList
         data={friend.friendData}
         renderItem={({item}) => (
-          <TouchableOpacity onPress={doChat} style={styles.padding}>
+          <TouchableOpacity
+            onPress={() => doChat(item.friend, item.contact.name)}
+            style={styles.padding}>
             <Contact item={item} />
           </TouchableOpacity>
         )}

@@ -33,8 +33,10 @@ export default function Home({navigation}) {
     navigation.navigate('Start_Chat');
   }
 
-  function readMessage() {
-    navigation.navigate('Chat');
+  function readMessage(friendId, friendName) {
+    dispatch(messageAction.clearDetail());
+    dispatch(messageAction.getMessageDetail(friendId, auth.token));
+    navigation.navigate('Chat', {friendId, friendName});
   }
 
   function getFriends() {
@@ -91,7 +93,13 @@ export default function Home({navigation}) {
                   : Avatar
               }
             />
-            <TouchableOpacity style={styles.message} onPress={readMessage}>
+            <TouchableOpacity
+              style={styles.message}
+              onPress={
+                item.sender_id !== id
+                  ? () => readMessage(item.sender_id, item.sender_name)
+                  : () => readMessage(item.receiver_id, item.receiver_name)
+              }>
               <Text style={styles.messageSender}>
                 {item.sender_id !== id ? item.sender_name : item.receiver_name}
               </Text>

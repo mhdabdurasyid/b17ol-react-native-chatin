@@ -10,4 +10,13 @@ export default {
   destroy: () => ({
     type: 'DESTROY_MESSAGE',
   }),
+  getMessageDetail: (friendId, token) => {
+    return {
+      type: 'GET_MESSAGE_DETAIL',
+      payload: http(token).get(`/message/${friendId}`),
+    };
+  },
+  clearDetail: () => ({
+    type: 'CLEAR_MESSAGE',
+  }),
 };

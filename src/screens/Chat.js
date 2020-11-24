@@ -1,52 +1,43 @@
 import React from 'react';
-import {StyleSheet, View, TouchableOpacity} from 'react-native';
-import {Container, Content, Text, Icon, Item, Input} from 'native-base';
+import {FlatList, StyleSheet, View, TouchableOpacity} from 'react-native';
+import {Container, Text, Icon, Item, Input} from 'native-base';
+import {useSelector} from 'react-redux';
+import dayjs from 'dayjs';
+import jwt_decode from 'jwt-decode';
 
-export default function Chat() {
+export default function Chat({route}) {
+  const message = useSelector((state) => state.message);
+  const auth = useSelector((state) => state.auth);
+  const {id} = jwt_decode(auth.token);
+  const {friendId, friendName} = route.params;
+
   return (
     <Container>
       <View style={[styles.padding, styles.header]}>
-        <Text style={styles.headerText}>Jeanne</Text>
+        <Text style={styles.headerText}>{friendName}</Text>
       </View>
-      <Content style={styles.padding}>
-        <View>
-          <Text style={[styles.message, styles.date]}>11.20.(Fri)</Text>
-          <View style={[styles.balloon, styles.balloonLeft]}>
-            <Text style={[styles.message, styles.messageWidth]}>
-              Hallo, selamat pagi.
-            </Text>
-            <Text style={styles.time}>19.00</Text>
-          </View>
-
-          <View style={styles.right}>
-            <View style={[styles.balloon, styles.balloonRight]}>
+      <FlatList
+        data={message.msgDetailData.message}
+        renderItem={({item}) => (
+          <View style={[styles.padding, item.sender_id === id && styles.right]}>
+            <View
+              style={[
+                styles.balloon,
+                item.sender_id === id
+                  ? styles.balloonRight
+                  : styles.balloonLeft,
+              ]}>
               <Text style={[styles.message, styles.messageWidth]}>
-                Iya selamat pagi juga.
+                {item.message}
               </Text>
-              <Text style={styles.time}>19.01</Text>
+              <Text style={styles.time}>
+                {dayjs(item.createdAt).format('hh:mm A')}
+              </Text>
             </View>
           </View>
-        </View>
-
-        <View>
-          <Text style={[styles.message, styles.date]}>11.21.(Sat)</Text>
-          <View style={[styles.balloon, styles.balloonLeft]}>
-            <Text style={[styles.message, styles.messageWidth]}>
-              Hallo, selamat pagi.
-            </Text>
-            <Text style={styles.time}>19.00</Text>
-          </View>
-
-          <View style={styles.right}>
-            <View style={[styles.balloon, styles.balloonRight]}>
-              <Text style={[styles.message, styles.messageWidth]}>
-                Iya selamat pagi juga.
-              </Text>
-              <Text style={styles.time}>19.01</Text>
-            </View>
-          </View>
-        </View>
-      </Content>
+        )}
+        keyExtractor={(item) => item.id}
+      />
       <View style={styles.sendMsg}>
         <Item style={styles.padding}>
           <Input multiline style={styles.message} />
