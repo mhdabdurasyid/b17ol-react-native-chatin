@@ -1,15 +1,37 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Container, Content, Text, Button, Item, Input, Icon} from 'native-base';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+import {useDispatch, useSelector} from 'react-redux';
 
-export default function ChangeEmail() {
+// import actions
+import profileAction from '../redux/actions/profile';
+
+export default function ChangeEmail({navigation}) {
+  const dispatch = useDispatch();
+  const profile = useSelector((state) => state.profile);
+  const auth = useSelector((state) => state.auth);
+
   const schema = Yup.object().shape({
     email: Yup.string()
       .email('Invalid email')
       .max(50, 'Max 50 characters')
       .required('Required field'),
+  });
+
+  function doChangeEmail(values) {
+    const form = new FormData();
+    form.append('email', values.email);
+    dispatch(profileAction.editProfile(form, auth.token));
+  }
+
+  useEffect(() => {
+    if (profile.isEdit) {
+      dispatch(profileAction.getProfile(auth.token));
+      dispatch(profileAction.resetEdit());
+      navigation.navigate('Accounts');
+    }
   });
 
   return (
@@ -18,7 +40,7 @@ export default function ChangeEmail() {
         email: '',
       }}
       validationSchema={schema}
-      onSubmit={(values) => console.log(values)}>
+      onSubmit={(values) => doChangeEmail(values)}>
       {({
         handleChange,
         handleBlur,
