@@ -1,4 +1,5 @@
 import http from '../../helpers/http';
+import qs from 'querystring';
 
 export default {
   getProfile: (token) => {
@@ -16,5 +17,9 @@ export default {
   }),
   resetEdit: () => ({
     type: 'RESET_EDIT',
+  }),
+  updatePassword: (data, token) => ({
+    type: 'UPDATE_PASSWORD',
+    payload: http(token).post('/users/updatePassword', qs.stringify(data)),
   }),
 };

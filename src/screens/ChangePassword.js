@@ -1,10 +1,18 @@
-import React from 'react';
-import {StyleSheet} from 'react-native';
+import React, {useEffect} from 'react';
+import {Alert, StyleSheet} from 'react-native';
 import {Container, Content, Text, Button, Item, Input} from 'native-base';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+import {useDispatch, useSelector} from 'react-redux';
 
-export default function ChangePassword() {
+// import actions
+import profileAction from '../redux/actions/profile';
+
+export default function ChangePassword({navigation}) {
+  const dispatch = useDispatch();
+  const profile = useSelector((state) => state.profile);
+  const auth = useSelector((state) => state.auth);
+
   const schema = Yup.object().shape({
     newPassword: Yup.string()
       .min(6, 'Password required 6 characters')
@@ -15,6 +23,19 @@ export default function ChangePassword() {
       .required('Required field'),
   });
 
+  function doChangePassword(data) {
+    dispatch(profileAction.updatePassword(data, auth.token));
+  }
+
+  useEffect(() => {
+    if (profile.isEdit) {
+      Alert.alert(profile.editAlert);
+      dispatch(profileAction.getProfile(auth.token));
+      dispatch(profileAction.resetEdit());
+      navigation.navigate('Accounts');
+    }
+  });
+
   return (
     <Formik
       initialValues={{
@@ -22,7 +43,7 @@ export default function ChangePassword() {
         confirmPassword: '',
       }}
       validationSchema={schema}
-      onSubmit={(values) => console.log(values)}>
+      onSubmit={(values) => doChangePassword(values)}>
       {({handleChange, handleBlur, handleSubmit, values, touched, errors}) => (
         <Container>
           <Content style={styles.padding}>

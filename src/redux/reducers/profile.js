@@ -67,6 +67,30 @@ export default (state = initialState, action) => {
         isEdit: false,
       };
     }
+    case 'UPDATE_PASSWORD_PENDING': {
+      return {
+        ...state,
+        editIsLoading: true,
+        editAlert: 'Update password in progress. Please wait..',
+      };
+    }
+    case 'UPDATE_PASSWORD_REJECTED': {
+      return {
+        ...state,
+        editIsLoading: false,
+        editIsError: true,
+        editAlert: action.payload.response.data.message,
+      };
+    }
+    case 'UPDATE_PASSWORD_FULFILLED': {
+      return {
+        ...state,
+        editIsLoading: false,
+        editIsError: false,
+        isEdit: true,
+        editAlert: action.payload.data.message,
+      };
+    }
     default: {
       return state;
     }
