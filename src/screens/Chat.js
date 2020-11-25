@@ -43,6 +43,7 @@ export default function Chat({route}) {
         <Text style={styles.headerText}>{friendName}</Text>
       </View>
       <FlatList
+        inverted
         data={message.msgDetailData.message}
         renderItem={({item}) => (
           <View style={[styles.padding, item.sender_id === id && styles.right]}>
