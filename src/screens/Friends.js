@@ -134,7 +134,11 @@ export default function Friends({navigation}) {
         keyExtractor={(item) => item.friend}
       />
 
-      <Modal animationType="fade" transparent={true} visible={modalVisible}>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Thumbnail
