@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Image,
@@ -51,6 +51,27 @@ export default function Home({navigation}) {
     navigation.navigate('Settings');
   }
 
+  function loadMore() {
+    const nextPage = message.messagePageInfo.currentPage + 1;
+    if (message.messagePageInfo.nextLink) {
+      dispatch(messageAction.getMessageList(auth.token, nextPage));
+    }
+  }
+
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    if (message.messageData) {
+      if (message.messagePageInfo.currentPage === 1) {
+        setData(message.messageData);
+      } else {
+        const newData = data.concat(message.messageData);
+        setData(newData);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [message.messageData]);
+
   return (
     <Container>
       <View style={[styles.padding, styles.appHeader]}>
@@ -79,7 +100,7 @@ export default function Home({navigation}) {
         </View>
       </View>
       <FlatList
-        data={message.messageData}
+        data={data}
         renderItem={({item}) => (
           <View style={[styles.chatCard, styles.padding]}>
             <Thumbnail
@@ -116,6 +137,8 @@ export default function Home({navigation}) {
           </View>
         )}
         keyExtractor={(item) => item.id}
+        onEndReached={loadMore}
+        onEndReachedThreshold={0.5}
       />
       <View>
         <Fab

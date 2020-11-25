@@ -2,19 +2,19 @@ import http from '../../helpers/http';
 import qs from 'querystring';
 
 export default {
-  getMessageList: (token) => {
+  getMessageList: (token, page = 1) => {
     return {
       type: 'GET_MESSAGE_LIST',
-      payload: http(token).get('/message'),
+      payload: http(token).get(`/message?page=${page}`),
     };
   },
   destroy: () => ({
     type: 'DESTROY_MESSAGE',
   }),
-  getMessageDetail: (friendId, token) => {
+  getMessageDetail: (friendId, token, page = 1) => {
     return {
       type: 'GET_MESSAGE_DETAIL',
-      payload: http(token).get(`/message/${friendId}`),
+      payload: http(token).get(`/message/${friendId}?page=${page}`),
     };
   },
   clearDetail: () => ({

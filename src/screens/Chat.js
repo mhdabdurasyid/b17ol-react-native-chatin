@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {FlatList, StyleSheet, View, TouchableOpacity} from 'react-native';
 import {Container, Text, Icon, Item, Input} from 'native-base';
 import {useDispatch, useSelector} from 'react-redux';
@@ -29,6 +29,27 @@ export default function Chat({route}) {
     dispatch(messageAction.sendMessage(data, auth.token));
   }
 
+  function loadMore() {
+    const nextPage = message.msgDetailPageInfo.currentPage + 1;
+    if (message.msgDetailPageInfo.nextLink) {
+      dispatch(messageAction.getMessageDetail(friendId, auth.token, nextPage));
+    }
+  }
+
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    if (message.msgDetailData.message) {
+      if (message.msgDetailPageInfo.currentPage === 1) {
+        setData(message.msgDetailData.message);
+      } else {
+        const newData = data.concat(message.msgDetailData.message);
+        setData(newData);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [message.msgDetailData.message]);
+
   useEffect(() => {
     if (message.isSend) {
       dispatch(messageAction.getMessageDetail(friendId, auth.token));
@@ -44,7 +65,7 @@ export default function Chat({route}) {
       </View>
       <FlatList
         inverted
-        data={message.msgDetailData.message}
+        data={data}
         renderItem={({item}) => (
           <View style={[styles.padding, item.sender_id === id && styles.right]}>
             <View
@@ -64,6 +85,8 @@ export default function Chat({route}) {
           </View>
         )}
         keyExtractor={(item) => item.id}
+        onEndReached={loadMore}
+        onEndReachedThreshold={0.5}
       />
       <View style={styles.sendMsg}>
         <Formik

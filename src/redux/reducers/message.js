@@ -1,10 +1,12 @@
 const initialState = {
   messageData: [],
+  messagePageInfo: {},
   messageIsLoading: false,
   messageIsError: false,
   messageAlertMsg: '',
 
   msgDetailData: {},
+  msgDetailPageInfo: {},
   msgDetailIsLoading: false,
   msgDetailIsError: false,
   msgDetailAlertMsg: '',
@@ -37,6 +39,7 @@ export default (state = initialState, action) => {
         messageIsLoading: false,
         messageIsError: false,
         messageData: action.payload.data.result,
+        messagePageInfo: action.payload.data.pageInfo,
       };
     }
     case 'DESTROY_MESSAGE': {
@@ -62,12 +65,14 @@ export default (state = initialState, action) => {
         msgDetailIsLoading: false,
         msgDetailIsError: false,
         msgDetailData: action.payload.data.result,
+        msgDetailPageInfo: action.payload.data.pageInfo,
       };
     }
     case 'CLEAR_MESSAGE': {
       return {
         ...state,
         msgDetailData: [],
+        msgDetailPageInfo: {},
       };
     }
     case 'SEND_MESSAGE_PENDING': {
