@@ -26,4 +26,10 @@ export default {
       payload: http(token).post('/friend', qs.stringify(data)),
     };
   },
+  deleteFriend: (id, token) => {
+    return {
+      type: 'DELETE_FRIEND',
+      payload: http(token).delete(`/friend/${id}`),
+    };
+  },
 };

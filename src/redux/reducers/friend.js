@@ -13,6 +13,11 @@ const initialState = {
   addIsError: false,
   addAlert: '',
   isAdd: false,
+
+  deleteIsLoading: false,
+  deleteIsError: false,
+  deleteAlert: '',
+  isDelete: false,
 };
 
 export default (state = initialState, action) => {
@@ -51,6 +56,8 @@ export default (state = initialState, action) => {
         searchAlert: '',
         addIsError: false,
         isAdd: false,
+        deleteIsError: false,
+        isDelete: false,
       };
     }
     case 'SEARCH_USER_PENDING': {
@@ -98,6 +105,30 @@ export default (state = initialState, action) => {
         addIsError: false,
         isAdd: true,
         addAlert: 'Successfully add new friend',
+      };
+    }
+    case 'DELETE_FRIEND_PENDING': {
+      return {
+        ...state,
+        deleteIsLoading: true,
+        deleteAlert: 'Removing friend. Please wait..',
+      };
+    }
+    case 'DELETE_FRIEND_REJECTED': {
+      return {
+        ...state,
+        deleteIsLoading: false,
+        deleteIsError: true,
+        deleteAlert: action.payload.response.data.message,
+      };
+    }
+    case 'DELETE_FRIEND_FULFILLED': {
+      return {
+        ...state,
+        deleteIsLoading: false,
+        deleteIsError: false,
+        isDelete: true,
+        deleteAlert: 'Successfully remove friend from list',
       };
     }
     default: {

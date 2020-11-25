@@ -48,13 +48,6 @@ export default function Friends({navigation}) {
     dispatch(friendAction.getFriendList(values.name, auth.token));
   }
 
-  useEffect(() => {
-    if (friend.friendIsError) {
-      Alert.alert("User isn't found!");
-      dispatch(friendAction.resetMsg());
-    }
-  });
-
   function setModalData(img, _name, _status, _friendId) {
     setModalVisible(true);
     setImage(img);
@@ -69,6 +62,23 @@ export default function Friends({navigation}) {
     dispatch(messageAction.getMessageDetail(_friendId, auth.token));
     navigation.navigate('Chat', {friendId: _friendId, friendName});
   }
+
+  function deleteFriend(_friendId) {
+    setModalVisible(false);
+    dispatch(friendAction.deleteFriend(_friendId, auth.token));
+  }
+
+  useEffect(() => {
+    if (friend.friendIsError) {
+      Alert.alert("User isn't found!");
+      dispatch(friendAction.resetMsg());
+    }
+
+    if (friend.isDelete) {
+      dispatch(friendAction.resetMsg());
+      dispatch(friendAction.getFriendList('', auth.token));
+    }
+  });
 
   return (
     <Container>
@@ -153,6 +163,18 @@ export default function Friends({navigation}) {
                 onPress={() => doChat(friendId, name)}>
                 <Icon type="MaterialIcons" name="sms" style={styles.iconSize} />
                 <Text style={styles.textStyle}>Chat</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.modalIcon}
+                onPress={() => {
+                  deleteFriend(friendId);
+                }}>
+                <Icon
+                  type="MaterialIcons"
+                  name="delete"
+                  style={styles.iconSize}
+                />
+                <Text style={styles.textStyle}>Remove</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.modalIcon}
