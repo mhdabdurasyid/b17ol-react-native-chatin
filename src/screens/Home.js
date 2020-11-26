@@ -11,6 +11,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import dayjs from 'dayjs';
 import jwt_decode from 'jwt-decode';
 import {API_URL} from '@env';
+import io from 'socket.io-client';
 
 // import actions
 import messageAction from '../redux/actions/message';
@@ -71,6 +72,17 @@ export default function Home({navigation}) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [message.messageData]);
+
+  useEffect(() => {
+    const socket = io(API_URL);
+    socket.on(id.toString(), () => {
+      dispatch(messageAction.getMessageList(auth.token));
+    });
+    return () => {
+      socket.close();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Container>

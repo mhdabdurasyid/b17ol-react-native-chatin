@@ -6,6 +6,8 @@ import dayjs from 'dayjs';
 import jwt_decode from 'jwt-decode';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+import io from 'socket.io-client';
+import {API_URL} from '@env';
 
 // import actions
 import messageAction from '../redux/actions/message';
@@ -57,6 +59,18 @@ export default function Chat({route}) {
       dispatch(messageAction.resetSend());
     }
   });
+
+  useEffect(() => {
+    const socket = io(API_URL);
+    socket.on(id.toString(), () => {
+      dispatch(messageAction.getMessageDetail(friendId, auth.token));
+      dispatch(messageAction.getMessageList(auth.token));
+    });
+    return () => {
+      socket.close();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Container>
